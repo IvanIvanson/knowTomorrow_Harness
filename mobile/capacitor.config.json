@@ -1,0 +1,18 @@
+{
+  "appId": "ru.knowtomorrow.app",
+  "appName": "KnowTomorrow",
+  "webDir": "../public",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://knowtomorrow.example",
+    "cleartext": false,
+    "allowNavigation": ["knowtomorrow.example", "*.knowtomorrow.example"]
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "limitsNavigationsToAppBoundDomains": true
+  }
+}

@@ -1,0 +1,53 @@
+name: Android APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Capacitor
+        working-directory: mobile
+        run: |
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android --no-audit --no-fund
+
+      - name: Configure app URL
+        working-directory: mobile
+        env:
+          APP_URL: ${{ vars.KNOWTOMORROW_APP_URL }}
+        run: |
+          node -e "const fs=require('fs');const p='capacitor.config.json';const c=JSON.parse(fs.readFileSync(p,'utf8'));const url=process.env.APP_URL||c.server.url;c.server.url=url;try{c.server.allowNavigation=[new URL(url).hostname];}catch{}fs.writeFileSync(p,JSON.stringify(c,null,2));console.log('server.url =',c.server.url);"
+
+      - name: Add Android platform and sync
+        working-directory: mobile
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Build debug APK
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: knowtomorrow-android-debug
+          path: mobile/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

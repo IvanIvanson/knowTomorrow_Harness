@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KnowTomorrow — дневник состояния с объяснимыми прогнозами</title>
+  <meta name="description" content="KnowTomorrow помогает заметить, что в вашей жизни связано с завтрашним настроением. Дневник по семи сферам, объяснимые связи и честные интервалы вместо гаданий.">
+  <meta name="theme-color" content="#0c2338">
+  <meta property="og:title" content="KnowTomorrow — не гадание, а наблюдение за собой">
+  <meta property="og:description" content="Дневник состояния по семи сферам. Объяснимые связи, покритериальные прогнозы и проверка модели на ваших прошлых днях.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/assets/logo.png">
+  <link rel="icon" href="/assets/icons/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body class="site">
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true">
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4L19 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.2c0 4.5-3 7.8-7 9.8-4-2-7-5.3-7-9.8V6z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 15l3.5-4 3 2.4L18 8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2.5a9.5 9.5 0 00-3 18.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.2-.2-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.2 9.2 0 014.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.7-4.5 4.9.4.3.7 1 .7 2v3c0 .3.2.6.7.5a9.5 9.5 0 00-3-18.5z" fill="currentColor"/></symbol>
+  </svg>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="KnowTomorrow — на главную">
+        <span class="brand-mark"><img src="/assets/logo.png" alt=""></span>
+        <span class="brand-name">Know<span class="brand-t">T</span>omorrow</span>
+      </a>
+      <nav class="site-nav" id="siteNav" aria-label="Основная навигация">
+        <a href="#why">Зачем</a>
+        <a href="#how">Как работает</a>
+        <a href="#features">Возможности</a>
+        <a href="#science">Наука</a>
+        <a href="#downloads">Скачать</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-sm header-login" href="?auth=login">Войти</a>
+        <a class="btn btn-primary btn-sm" href="#start">Начать</a>
+        <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Открыть меню">
+          <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-orbit" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Дневник состояния · семь сфер</span>
+          <h1>Не гадание.<br><span class="accent">Наблюдение</span> за собой.</h1>
+          <p class="lead">Карты и гороскопы обещают знать будущее. KnowTomorrow предлагает другое: отмечать, что с вами происходит, и замечать, какие события связаны с завтрашним настроением.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="#start">
+              Начать вести дневник
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </a>
+            <button class="btn btn-outline btn-lg" id="heroInstall" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+              Установить
+            </button>
+          </div>
+          <ul class="hero-points">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Бесплатно</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg> Данные под вашим контролем</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg> Работает офлайн</li>
+          </ul>
+          <div class="hero-social" id="heroSocial">
+            <span class="hero-social-dot"></span>
+            <span id="heroSocialText">Идёт набор первых участников</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-ring">
+            <svg viewBox="0 0 420 420" role="presentation">
+              <circle cx="210" cy="210" r="196" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 9"/>
+              <circle cx="210" cy="210" r="160" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
+              <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M210 24v14M210 382v14M24 210h14M382 210h14"/>
+                <path d="M342 76l-10 10M88 334l-10 10M344 344l-10-10M86 86L76 76"/>
+              </g>
+              <path d="M210 50a160 160 0 01151 106" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <article class="preview-card">
+            <div class="preview-top">
+              <div>
+                <p class="preview-kicker">Гипотеза на завтра</p>
+                <p class="preview-date">9 ноября, воскресенье</p>
+              </div>
+              <span class="badge badge--teal">средняя уверенность</span>
+            </div>
+            <div class="preview-score">
+              <strong>6.9</strong>
+              <span class="preview-range">интервал 5.3–8.1</span>
+            </div>
+            <div class="preview-bars">
+              <div class="preview-bar-row">
+                <span>Самочувствие</span>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="72" height="8" rx="4" fill="var(--teal)"/></svg>
+                <b>7.0</b>
+              </div>
+              <div class="preview-bar-row">
+                <span>Дом</span>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="76" height="8" rx="4" fill="var(--teal)"/></svg>
+                <b>7.4</b>
+              </div>
+              <div class="preview-bar-row">
+                <span>Работа</span>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="64" height="8" rx="4" fill="var(--amber)"/></svg>
+                <b>6.4</b>
+              </div>
+              <div class="preview-bar-row">
+                <span>Неживое</span>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="56" height="8" rx="4" fill="var(--red)"/></svg>
+                <b>5.6</b>
+              </div>
+            </div>
+            <div class="preview-why">
+              <span class="preview-why-label">Почему</span>
+              <p>Вчерашняя поломка техники и низкое самочувствие тянут оценку вниз. День недели — наоборот, вверх.</p>
+            </div>
+            <div class="preview-foot">
+              <span>Проверено на 42 прошлых днях</span>
+              <span class="preview-method">Ridge</span>
+            </div>
+          </article>
+
+          <aside class="preview-note">
+            <span class="preview-note-icon">
+              <svg class="icon" aria-hidden="true"><use href="#i-spark"></use></svg>
+            </span>
+            <div>
+              <strong>Паттерн, а не пророчество</strong>
+              <p>После дней с низкой «неживой природой» следующий день в среднем на 0.5 балла ниже. n = 11, p = 0.003.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-strip">
+      <div class="container proof-grid">
+        <div class="proof-item"><strong>7</strong><span>сфер влияния</span></div>
+        <div class="proof-item"><strong>AHP</strong><span>веса и проверка CR</span></div>
+        <div class="proof-item"><strong>1–3–7</strong><span>временные лаги</span></div>
+        <div class="proof-item"><strong>walk-forward</strong><span>проверка на прошлом</span></div>
+        <div class="proof-item"><strong>PWA</strong><span>телефон и компьютер</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Позиция</span>
+          <h2>Почему это не очередное гадание</h2>
+          <p class="lead">Мы не утверждаем, что знаем будущее. Мы показываем, что можно проверить: ваши записи, повторяющиеся связи и границы уверенности.</p>
+        </div>
+        <div class="grid grid-3 why-grid">
+          <article class="card card-pad reveal">
+            <span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
+            <h3>Связи вместо пророчеств</h3>
+            <p>Лаги, корреляции и различия групп отвечают на вопрос «что было связано с чем», а не «что точно случится».</p>
+          </article>
+          <article class="card card-pad reveal">
+            <span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></span>
+            <h3>Честная неопределённость</h3>
+            <p>У каждого прогноза есть интервал, число наблюдений и результат проверки на прошлых днях. Если модель не лучше наивной — так и написано.</p>
+          </article>
+          <article class="card card-pad reveal">
+            <span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg></span>
+            <h3>Ваши данные — у вас</h3>
+            <p>Гостевой режим хранит всё в браузере. Аккаунт нужен только для синхронизации между устройствами. Экспорт и удаление — в один клик.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="how">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Как это работает</span>
+          <h2>Один день — одна запись.<br>Через две недели появляются связи.</h2>
+        </div>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-num">01</span>
+            <div>
+              <h3>Оцените день</h3>
+              <p>Семь сфер: самочувствие, дом, работа, улица, погода, живая и неживая природа. От 1 до 10. Можно пропустить то, что не хотите оценивать.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">02</span>
+            <div>
+              <h3>Настройте веса</h3>
+              <p>Матрица парных сравнений Саати показывает, что важно именно для вас. Проверка согласованности подскажет, если суждения противоречат друг другу.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">03</span>
+            <div>
+              <h3>Смотрите паттерны</h3>
+              <p>Приложение находит запаздывающие связи и различия: что чаще происходит перед хорошим или плохим следующим днём. С поправкой на множественные сравнения.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">04</span>
+            <div>
+              <h3>Читайте прогноз как гипотезу</h3>
+              <p>По каждой сфере и общей оценке — интервал, уверенность и объяснение. Модель проверена на вашем прошлом, а не на чужих обещаниях.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="steps-cta reveal">
+          <a class="btn btn-primary" href="#start">Попробовать на своих данных</a>
+          <a class="btn btn-ghost" href="/app?demo=1">Посмотреть с демо-данными</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Возможности</span>
+          <h2>Больше, чем график настроения</h2>
+        </div>
+        <div class="grid grid-3 feature-grid">
+          <article class="feature-card reveal">
+            <span class="feature-num">01</span>
+            <h3>Прогноз по каждой сфере</h3>
+            <p>Не только «общая оценка», но и отдельно самочувствие, работа, дом, погода и остальные критерии. С интервалом и трендом.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-num">02</span>
+            <h3>Объяснение «почему»</h3>
+            <p>Вклад признаков: «вчерашняя работа тянет вниз», «среднее за неделю — вверх». Для линейной модели — точные вклады, для деревьев — приблизительные.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-num">03</span>
+            <h3>Паттерны с статистикой</h3>
+            <p>Лаги 1, 2 и 3 дня, размер эффекта, p-значения и поправка Бенджамини—Хохберга. Без «учёные доказали».</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-num">04</span>
+            <h3>Веса Саати с CR</h3>
+            <p>Матрица парных сравнений, веса, индекс и отношение согласованности. Если CR &gt; 0.1 — приложение предложит конкретную тройку для пересмотра.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-num">05</span>
+            <h3>Холодный старт</h3>
+            <p>Пока данных мало, прогноз опирается на ваше среднее и анонимные популяционные ориентиры. По мере накопления записей подключается персональная модель.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-num">06</span>
+            <h3>Веб, телефон, компьютер</h3>
+            <p>Устанавливается как PWA, работает офлайн. Для Windows, macOS, Linux и Android доступны сборки в GitHub Releases.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--science" id="science">
+      <div class="container science-grid">
+        <div class="science-copy reveal">
+          <span class="eyebrow">Наука и границы</span>
+          <h2>Модель, которую можно проверить</h2>
+          <p class="lead">На малых данных сложная нейросеть часто проигрывает простому среднему. Поэтому мы сравниваем модели на прошлых днях и выбираем ту, что действительно лучше.</p>
+          <ul class="science-list">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Ridge-регрессия и градиентный бустинг с малым числом признаков</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Признаки: лаги 1–2–3–7 дней, скользящие средние, день недели, перерыв в записях</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Walk-forward проверка: модель обучается только на прошлом</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Сравнение MAE и RMSE с наивным прогнозом «завтра = сегодня»</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Парный t-тест и поправка на множественные сравнения</li>
+          </ul>
+          <p class="science-note">Это инструмент саморефлексии, а не медицинский или диагностический прибор. Прогнозы — гипотезы, основанные на ваших записях.</p>
+        </div>
+        <aside class="model-card reveal">
+          <div class="model-card-head">
+            <span class="badge badge--teal">model card</span>
+            <span class="model-card-date">демо-данные · 70 дней</span>
+          </div>
+          <h3>Проверка на прошлом</h3>
+          <table class="model-table">
+            <thead>
+              <tr><th>Метрика</th><th>Наивно</th><th>Модель</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>MAE</td><td>0.65</td><td class="model-strong">0.58</td></tr>
+              <tr><td>RMSE</td><td>0.81</td><td class="model-strong">0.74</td></tr>
+              <tr><td>Улучшение</td><td>—</td><td>≈11%</td></tr>
+              <tr><td>p-значение</td><td colspan="2">0.24 · не значимо</td></tr>
+            </tbody>
+          </table>
+          <p class="model-verdict">Небольшое улучшение, которого недостаточно для громких заявлений. Именно поэтому в приложении показывается и наивный прогноз.</p>
+          <div class="model-tags">
+            <span class="pill">AHP</span>
+            <span class="pill">CR</span>
+            <span class="pill">Ridge</span>
+            <span class="pill">GBDT</span>
+            <span class="pill">BH-FDR</span>
+          </div>
+          <p class="model-foot">Цифры приведены как пример формата отчёта, а не как обещание точности.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="downloads">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="row row--between">
+            <div>
+              <span class="eyebrow">Установка</span>
+              <h2>Работает там, где вы</h2>
+            </div>
+            <span class="platform-badge" id="platformBadge">определяем платформу…</span>
+          </div>
+          <p class="lead">Веб-версия доступна сразу. Мобильная и десктопная установка не требует магазинов приложений.</p>
+        </div>
+        <div class="download-grid">
+          <article class="download-card download-card--featured reveal">
+            <div class="download-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg></div>
+            <span class="badge badge--teal">рекомендуем</span>
+            <h3>Установить как приложение</h3>
+            <p>PWA для Windows, macOS, Linux, Android и iOS. Иконка на рабочем столе, полноэкранный режим, офлайн-доступ.</p>
+            <button class="btn btn-primary btn-block" id="installBtn" type="button">Установить KnowTomorrow</button>
+            <p class="download-hint" id="installHint">Если кнопка не сработала — используйте меню браузера: «Установить приложение».</p>
+          </article>
+          <article class="download-card reveal" data-platform="windows">
+            <div class="download-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></div>
+            <h3>Windows</h3>
+            <p>Установщик или portable-сборка. Данные синхронизируются с аккаунтом.</p>
+            <a class="btn btn-outline btn-block" href="https://github.com/IvanIvanson/knowTomorrow_Deepseek/releases" data-release-link>Скачать для Windows</a>
+          </article>
+          <article class="download-card reveal" data-platform="macos">
+            <div class="download-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"></use></svg></div>
+            <h3>macOS и Linux</h3>
+            <p>DMG для Apple Silicon и Intel, AppImage и deb для Linux.</p>
+            <a class="btn btn-outline btn-block" href="https://github.com/IvanIvanson/knowTomorrow_Deepseek/releases" data-release-link>Открыть Releases</a>
+          </article>
+          <article class="download-card reveal" data-platform="android">
+            <div class="download-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></div>
+            <h3>Android</h3>
+            <p>APK из GitHub Releases или установка PWA из Chrome. Оба варианта работают с тем же аккаунтом.</p>
+            <a class="btn btn-outline btn-block" href="https://github.com/IvanIvanson/knowTomorrow_Deepseek/releases" data-release-link>Скачать APK</a>
+          </article>
+          <article class="download-card reveal" data-platform="ios">
+            <div class="download-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg></div>
+            <h3>iPhone и iPad</h3>
+            <p>Откройте сайт в Safari, нажмите «Поделиться» и выберите «На экран „Домой“».</p>
+            <a class="btn btn-outline btn-block" href="#install-ios">Инструкция для iOS</a>
+          </article>
+        </div>
+        <div class="download-note reveal" id="install-ios">
+          <strong>Сборки и исходный код.</strong>
+          <p>Нативные установщики собираются в GitHub Actions при выпуске тега и публикуются в <a href="https://github.com/IvanIvanson/knowTomorrow_Deepseek/releases" data-release-link>Releases</a>. Если релиз ещё не опубликован, используйте PWA — она устанавливается уже сейчас. Исходный код: <a href="https://github.com/IvanIvanson/knowTomorrow_Deepseek">github.com/IvanIvanson/knowTomorrow_Deepseek</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--auth" id="start">
+      <div class="container auth-grid">
+        <div class="auth-copy reveal">
+          <span class="eyebrow">Начать</span>
+          <h2>Первый день — сегодня</h2>
+          <p class="lead">Заведите аккаунт, чтобы синхронизировать записи между телефоном и компьютером. Или попробуйте без регистрации — данные останутся в браузере.</p>
+          <ul class="auth-benefits">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Регистрация за минуту, без карты</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Экспорт всех данных в JSON в любой момент</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Удаление аккаунта вместе с данными</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Анонимная агрегация — только с вашего согласия</li>
+          </ul>
+          <div class="auth-quote">
+            <p>«Прогноз — это гипотеза, а не приговор. Интереснее не угадать завтра, а понять, что на вас влияет».</p>
+            <span>из описания проекта</span>
+          </div>
+        </div>
+
+        <div class="auth-card card reveal">
+          <div class="auth-tabs" role="tablist" aria-label="Вход и регистрация">
+            <button class="auth-tab is-active" id="tabLogin" type="button" role="tab" aria-selected="true" aria-controls="loginPanel" data-auth-tab="login">Вход</button>
+            <button class="auth-tab" id="tabRegister" type="button" role="tab" aria-selected="false" aria-controls="registerPanel" data-auth-tab="register">Регистрация</button>
+          </div>
+          <div class="auth-panel" id="loginPanel" role="tabpanel" aria-labelledby="tabLogin">
+            <form id="loginForm" novalidate>
+              <div class="form-error" id="loginError" role="alert"></div>
+              <div class="field">
+                <label for="loginEmail">Email</label>
+                <input id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+              </div>
+              <div class="field">
+                <label for="loginPassword">Пароль</label>
+                <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="Ваш пароль">
+              </div>
+              <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">Войти</button>
+              <p class="auth-alt">Нет аккаунта? <button class="link-button" type="button" data-auth-tab="register">Зарегистрироваться</button></p>
+            </form>
+          </div>
+          <div class="auth-panel hidden" id="registerPanel" role="tabpanel" aria-labelledby="tabRegister">
+            <form id="registerForm" novalidate>
+              <div class="form-error" id="registerError" role="alert"></div>
+              <div class="field">
+                <label for="registerName">Как к вам обращаться</label>
+                <input id="registerName" name="name" type="text" autocomplete="name" maxlength="60" placeholder="Имя">
+              </div>
+              <div class="field">
+                <label for="registerEmail">Email</label>
+                <input id="registerEmail" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+              </div>
+              <div class="field">
+                <label for="registerPassword">Пароль</label>
+                <input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="Не короче 8 символов">
+                <span class="hint">Минимум 8 символов. Пароль хранится только в виде scrypt-хэша.</span>
+              </div>
+              <label class="checkbox mb-2">
+                <input id="registerTerms" name="terms" type="checkbox" required>
+                <span>Принимаю <a href="/privacy.html" target="_blank" rel="noopener">условия использования и политику конфиденциальности</a>.</span>
+              </label>
+              <label class="checkbox mb-3">
+                <input id="registerResearch" name="research" type="checkbox">
+                <span>Разрешаю анонимную агрегацию оценок для популяционных ориентиров. Отдельные записи не передаются.</span>
+              </label>
+              <button class="btn btn-primary btn-block" type="submit" id="registerSubmit">Создать аккаунт</button>
+              <p class="auth-alt">Уже есть аккаунт? <button class="link-button" type="button" data-auth-tab="login">Войти</button></p>
+            </form>
+          </div>
+          <div class="auth-demo">
+            <span>Не хотите регистрироваться?</span>
+            <a href="/app?demo=1">Открыть демо без аккаунта</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="faq">
+      <div class="container container--narrow">
+        <div class="section-head reveal">
+          <span class="eyebrow">Вопросы</span>
+          <h2>Коротко о важном</h2>
+        </div>
+        <div class="faq">
+          <details class="reveal">
+            <summary>Это медицинское приложение?</summary>
+            <p>Нет. KnowTomorrow — инструмент саморефлексии, а не диагностический или медицинский прибор. Он не заменяет врача и не даёт рекомендаций по лечению. Если состояние вас беспокоит, обратитесь к специалисту.</p>
+          </details>
+          <details class="reveal">
+            <summary>Насколько точен прогноз?</summary>
+            <p>На малых данных — умеренно или никак. Приложение честно сравнивает модель с наивным прогнозом «завтра = сегодня», показывает MAE, RMSE и p-значение. Если улучшения нет, вы это увидите, а не красивую цифру без оснований.</p>
+          </details>
+          <details class="reveal">
+            <summary>Какие методы используются?</summary>
+            <p>Матрица парных сравнений Саати (AHP) с отношением согласованности CR, лаговые корреляции, различия групп, Ridge-регрессия и градиентный бустинг на небольшом числе признаков, walk-forward проверка и поправка Бенджамини—Хохберга.</p>
+          </details>
+          <details class="reveal">
+            <summary>Куда попадают мои данные?</summary>
+            <p>В гостевом режиме — только в localStorage вашего браузера. В аккаунте — на сервер KnowTomorrow в виде вашего дневника. Анонимная агрегация для популяционных ориентиров включается только отдельным согласием и не содержит отдельных записей.</p>
+          </details>
+          <details class="reveal">
+            <summary>Можно ли выгрузить или удалить данные?</summary>
+            <p>Да. В настройках приложения есть экспорт в JSON, импорт, экспорт CSV и полное удаление аккаунта вместе с записями. Для удаления нужно подтвердить пароль.</p>
+          </details>
+          <details class="reveal">
+            <summary>Почему прогноз по критериям иногда совпадает со средним?</summary>
+            <p>Потому что на ваших данных более сложная модель не обошла среднее. Это нормальный результат для небольших рядов. Приложение выбирает модель по фактической ошибке, а не по сложности.</p>
+          </details>
+          <details class="reveal">
+            <summary>Как установить на iPhone?</summary>
+            <p>Откройте сайт в Safari, нажмите кнопку «Поделиться» (квадрат со стрелкой), прокрутите и выберите «На экран „Домой“». Приложение появится как иконка и будет работать в полноэкранном режиме.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand--footer" href="/">
+          <span class="brand-mark"><img src="/assets/logo.png" alt=""></span>
+          <span class="brand-name">Know<span class="brand-t">T</span>omorrow</span>
+        </a>
+        <p>Дневник состояния с объяснимыми прогнозами. Не гадание — наблюдение за собой.</p>
+        <p class="footer-disclaimer">Не является медицинским изделием. Прогнозы — гипотезы, основанные на ваших записях.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Продукт</h4>
+        <a href="#features">Возможности</a>
+        <a href="#science">Наука</a>
+        <a href="#downloads">Скачать</a>
+        <a href="/app">Открыть приложение</a>
+      </div>
+      <div class="footer-col">
+        <h4>Документы</h4>
+        <a href="/privacy.html">Конфиденциальность</a>
+        <a href="/privacy.html#terms">Условия</a>
+        <a href="#faq">Вопросы</a>
+        <a href="https://github.com/IvanIvanson/knowTomorrow_Deepseek" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="footer-col">
+        <h4>Связь</h4>
+        <a href="mailto:ghalut@mail.ru">ghalut@mail.ru</a>
+        <span class="footer-meta">KnowTomorrow v2.0</span>
+        <span class="footer-meta">Сделано с уважением к данным</span>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© <span id="year">2026</span> KnowTomorrow</span>
+      <span>Без карт, кофейной гущи и гороскопов.</span>
+    </div>
+  </footer>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script type="module" src="/js/site.js"></script>
+</body>
+</html>
+

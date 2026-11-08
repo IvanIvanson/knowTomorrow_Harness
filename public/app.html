@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>KnowTomorrow — дневник и прогноз</title>
+  <meta name="description" content="Ежедневный дневник состояния: семь сфер, объяснимые связи, покритериальные прогнозы и честная неопределённость.">
+  <meta name="theme-color" content="#0c2338">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="KnowTomorrow">
+  <link rel="icon" href="/assets/icons/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body class="app">
+  <a class="skip-link" href="#appContent">Перейти к содержимому</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Боковая навигация">
+      <a class="app-brand" href="/">
+        <span class="brand-mark"><img src="/assets/logo.png" alt=""></span>
+        <span class="app-brand-text">Know<span class="brand-t">T</span>omorrow</span>
+      </a>
+
+      <div class="sidebar-date">
+        <span class="sidebar-date-label">Сегодня</span>
+        <strong id="sidebarDate">—</strong>
+        <span id="sidebarWeekday" class="muted"></span>
+      </div>
+
+      <nav class="side-nav" aria-label="Разделы приложения">
+        <button class="nav-item is-active" type="button" data-view="today">
+          <span class="nav-ico" data-icon="calendar"></span>
+          <span>Сегодня</span>
+        </button>
+        <button class="nav-item" type="button" data-view="history">
+          <span class="nav-ico" data-icon="list"></span>
+          <span>История</span>
+          <span class="nav-count" id="navHistoryCount">0</span>
+        </button>
+        <button class="nav-item" type="button" data-view="insights">
+          <span class="nav-ico" data-icon="spark"></span>
+          <span>Аналитика</span>
+        </button>
+        <button class="nav-item" type="button" data-view="forecast">
+          <span class="nav-ico" data-icon="target"></span>
+          <span>Прогноз</span>
+          <span class="nav-badge" id="navForecastBadge">гипотеза</span>
+        </button>
+        <div class="nav-sep" role="separator"></div>
+        <button class="nav-item" type="button" data-view="weights">
+          <span class="nav-ico" data-icon="sliders"></span>
+          <span>Веса</span>
+        </button>
+        <button class="nav-item" type="button" data-view="settings">
+          <span class="nav-ico" data-icon="settings"></span>
+          <span>Настройки</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="sync-status" id="syncStatus">
+          <span class="sync-dot"></span>
+          <span id="syncText">Гостевой режим</span>
+        </div>
+        <div class="account-mini" id="accountMini">
+          <span class="account-avatar" id="accountAvatar">Г</span>
+          <div class="account-mini-text">
+            <strong id="accountName">Гость</strong>
+            <span id="accountEmail">данные в браузере</span>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm btn-block" type="button" id="accountAction">
+          Войти в аккаунт
+        </button>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+
+    <div class="app-main">
+      <header class="app-topbar">
+        <button class="icon-btn menu-toggle" id="menuToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="sidebar">
+          <span data-icon="menu"></span>
+        </button>
+        <div class="topbar-title">
+          <p class="topbar-kicker" id="viewKicker">Дневник</p>
+          <h1 id="viewTitle">Сегодня</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="offline-badge hidden" id="offlineBadge">Офлайн</span>
+          <a class="btn btn-ghost btn-sm topbar-login" id="topbarLogin" href="/?auth=login">Войти</a>
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Переключить тему" title="Тема">
+            <span data-icon="moon"></span>
+          </button>
+          <button class="account-chip" id="accountChip" type="button" aria-label="Аккаунт">
+            <span class="account-avatar" id="topbarAvatar">Г</span>
+            <span id="topbarName">Гость</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="app-content" id="appContent">
+        <!-- СЕГОДНЯ -->
+        <section class="view is-active" id="view-today" data-view="today" aria-labelledby="viewTitle">
+          <div class="view-heading">
+            <div>
+              <h2>Как прошёл день?</h2>
+              <p class="muted">Оцените сферы, которые влияли на вас. Можно пропустить то, что не хотите отмечать.</p>
+            </div>
+            <div class="view-heading-actions">
+              <span class="badge" id="todayStatus">не отмечено</span>
+              <button class="btn btn-ghost btn-sm" type="button" id="loadDemoBtn">Демо-данные</button>
+            </div>
+          </div>
+
+          <div class="today-grid">
+            <form class="card rating-card" id="todayForm" novalidate>
+              <div class="rating-date-row">
+                <div class="field field--inline">
+                  <label for="ratingDate">Дата</label>
+                  <input type="date" id="ratingDate" required>
+                </div>
+                <div class="rating-date-meta" id="ratingDateMeta"></div>
+              </div>
+
+              <div class="rating-rows" id="ratingRows"></div>
+
+              <div class="field">
+                <label for="ratingNote">Заметка дня <span class="muted">(необязательно)</span></label>
+                <textarea id="ratingNote" maxlength="500" rows="2" placeholder="Что ещё повлияло? Например: сломался ноутбук, долгая прогулка."></textarea>
+              </div>
+
+              <div class="rating-summary">
+                <div class="rating-summary-score">
+                  <span>Взвешенная оценка</span>
+                  <strong id="overallPreview">—</strong>
+                </div>
+                <p class="rating-summary-hint" id="overallHint">Заполните хотя бы одну сферу.</p>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit" id="saveRatingBtn">Сохранить день</button>
+                <button class="btn btn-ghost" type="button" id="clearRatingBtn">Очистить</button>
+              </div>
+            </form>
+
+            <aside class="today-aside">
+              <div class="card streak-card" id="streakCard">
+                <span class="card-kicker">Серия наблюдений</span>
+                <div class="streak-value"><strong id="streakValue">0</strong><span id="streakUnit">дней</span></div>
+                <p class="muted small" id="streakHint">Одна запись в день — и через две недели появятся первые связи.</p>
+              </div>
+              <div class="card today-insight" id="todayInsight">
+                <span class="card-kicker">Что уже видно</span>
+                <p id="todayInsightText" class="muted">Добавьте несколько дней, чтобы увидеть связи и прогноз.</p>
+                <button class="btn btn-ghost btn-sm" type="button" data-go="insights">Открыть аналитику</button>
+              </div>
+              <div class="card privacy-note">
+                <span class="privacy-note-icon" data-icon="shield"></span>
+                <div>
+                  <strong>Данные под вашим контролем</strong>
+                  <p class="muted small">В гостевом режиме записи остаются в браузере. Экспорт и удаление доступны в настройках.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ИСТОРИЯ -->
+        <section class="view" id="view-history" data-view="history" hidden>
+          <div class="view-heading">
+            <div>
+              <h2>История наблюдений</h2>
+              <p class="muted">Все записи, графики и экспорт. Правьте дни, если ошиблись с оценкой.</p>
+            </div>
+            <div class="view-heading-actions">
+              <button class="btn btn-outline btn-sm" type="button" id="addPastBtn">
+                <span data-icon="plus"></span> Добавить день
+              </button>
+              <button class="btn btn-ghost btn-sm" type="button" id="exportJsonBtn">Экспорт JSON</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="exportCsvBtn">CSV</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="importBtn">Импорт</button>
+              <input type="file" id="importFile" accept="application/json,.json" hidden>
+            </div>
+          </div>
+
+          <div class="card chart-card">
+            <div class="chart-head">
+              <div>
+                <span class="card-kicker">Динамика</span>
+                <h3 id="chartTitle">Общая оценка</h3>
+              </div>
+              <div class="field field--compact">
+                <label for="chartSelect" class="sr-only">Что показать на графике</label>
+                <select id="chartSelect">
+                  <option value="overall">Общая оценка</option>
+                  <option value="wellbeing">Самочувствие</option>
+                  <option value="home">Отношения дома</option>
+                  <option value="work">Отношения на работе</option>
+                  <option value="street">Отношения на улице</option>
+                  <option value="weather">Погода</option>
+                  <option value="inanimate">Неживая природа</option>
+                  <option value="living">Живая природа</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-box" id="historyChart"></div>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-head">
+              <div>
+                <span class="card-kicker">Записи</span>
+                <h3>Дневник</h3>
+              </div>
+              <div class="field field--compact">
+                <label for="historyPeriod" class="sr-only">Период</label>
+                <select id="historyPeriod">
+                  <option value="30">30 дней</option>
+                  <option value="90">90 дней</option>
+                  <option value="all" selected>Всё время</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table" id="historyTable">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Оценка</th>
+                    <th>Сферы</th>
+                    <th>Заметка</th>
+                    <th class="th-actions">Действия</th>
+                  </tr>
+                </thead>
+                <tbody id="historyBody"></tbody>
+              </table>
+            </div>
+            <div class="empty-state hidden" id="historyEmpty">
+              <span class="empty-icon" data-icon="calendar"></span>
+              <h3>Пока нет записей</h3>
+              <p>Начните с сегодняшнего дня. Одна запись занимает меньше минуты.</p>
+              <button class="btn btn-primary" type="button" data-go="today">Оценить сегодня</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- АНАЛИТИКА -->
+        <section class="view" id="view-insights" data-view="insights" hidden>
+          <div class="view-heading">
+            <div>
+              <h2>Что связано с вашим завтра</h2>
+              <p class="muted">Предварительные связи в ваших данных. Это не доказательства причинности.</p>
+            </div>
+            <span class="badge badge--amber" id="insightsBadge">исследовательский режим</span>
+          </div>
+
+          <div class="insight-cards" id="insightCards"></div>
+
+          <div class="grid grid-2 insights-grid">
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Профиль</span>
+                  <h3>Средние по сферам</h3>
+                </div>
+                <span class="pill" id="radarPeriod">весь период</span>
+              </div>
+              <div class="chart-box chart-box--radar" id="radarChart"></div>
+            </div>
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Ритм</span>
+                  <h3>По дням недели</h3>
+                </div>
+              </div>
+              <div class="chart-box" id="weekdayChart"></div>
+            </div>
+          </div>
+
+          <div class="card card-pad patterns-card">
+            <div class="card-heading">
+              <div>
+                <span class="card-kicker">Паттерны</span>
+                <h3>Что чаще предшествует хорошему или плохому дню</h3>
+              </div>
+              <span class="badge" id="patternCount">0</span>
+            </div>
+            <div id="patternsList" class="pattern-list"></div>
+            <p class="stat-note" id="patternNote">Показаны связи с поправкой на множественные сравнения (Benjamini–Hochberg). Малые выборки дают нестабильные оценки.</p>
+          </div>
+
+          <div class="card card-pad">
+            <div class="card-heading">
+              <div>
+                <span class="card-kicker">Корреляции</span>
+                <h3>Связь сферы с общей оценкой через 1–3 дня</h3>
+              </div>
+              <span class="badge">Pearson r</span>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table correlation-table" id="correlationTable">
+                <thead>
+                  <tr>
+                    <th>Сфера</th>
+                    <th>Лаг 1</th>
+                    <th>Лаг 2</th>
+                    <th>Лаг 3</th>
+                  </tr>
+                </thead>
+                <tbody id="correlationBody"></tbody>
+              </table>
+            </div>
+            <p class="stat-note">r от −1 до 1. Цвет — направление и сила связи. p и q — без поправки и с поправкой на множественные сравнения.</p>
+          </div>
+
+          <div class="empty-state hidden" id="insightsEmpty">
+            <span class="empty-icon" data-icon="spark"></span>
+            <h3>Нужно ещё несколько дней</h3>
+            <p>Связи появляются, когда есть хотя бы 6–8 наблюдений. Продолжайте отмечать дни — и здесь станет интереснее.</p>
+            <button class="btn btn-primary" type="button" data-go="today">Добавить день</button>
+          </div>
+        </section>
+
+        <!-- ПРОГНОЗ -->
+        <section class="view" id="view-forecast" data-view="forecast" hidden>
+          <div class="view-heading">
+            <div>
+              <h2>Гипотеза на следующий день</h2>
+              <p class="muted">Не предсказание. Оценка на основе ваших прошлых записей, с интервалом и объяснением.</p>
+            </div>
+            <div class="view-heading-actions">
+              <span class="badge badge--teal" id="forecastHorizon">—</span>
+              <button class="btn btn-outline btn-sm" type="button" id="recalcForecastBtn">
+                <span data-icon="sync"></span> Пересчитать
+              </button>
+            </div>
+          </div>
+
+          <div class="disclaimer-banner">
+            <span class="disclaimer-icon" data-icon="info"></span>
+            <div>
+              <strong>Это гипотеза, а не обещание.</strong>
+              <p>Прогноз не учитывает события, которых нет в дневнике, и не является медицинской рекомендацией. Смотрите на интервал, а не только на число.</p>
+            </div>
+          </div>
+
+          <div id="forecastLoading" class="forecast-loading hidden">
+            <div class="loading-card">
+              <span class="spinner spinner--lg"></span>
+              <div>
+                <strong>Считаем модели…</strong>
+                <p id="forecastLoadingText">Строим признаки и проверяем на прошлых днях.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="forecastContent" class="hidden"></div>
+
+          <div class="empty-state" id="forecastEmpty">
+            <span class="empty-icon" data-icon="target"></span>
+            <h3>Пока не из чего строить прогноз</h3>
+            <p>Нужна хотя бы одна запись. Лучше — 7–14 дней, чтобы модель можно было проверить на прошлом.</p>
+            <button class="btn btn-primary" type="button" data-go="today">Оценить день</button>
+          </div>
+        </section>
+
+        <!-- ВЕСА -->
+        <section class="view" id="view-weights" data-view="weights" hidden>
+          <div class="view-heading">
+            <div>
+              <h2>Что для вас важнее</h2>
+              <p class="muted">Матрица парных сравнений Саати. Веса влияют на общую оценку и прогноз.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" type="button" id="saveWeightsBtn">Сохранить веса</button>
+          </div>
+
+          <div class="weights-layout">
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">AHP</span>
+                  <h3>Парные сравнения</h3>
+                </div>
+                <div class="preset-row" id="presetRow"></div>
+              </div>
+              <p class="stat-note">Сравните критерий в строке с критерием в столбце. 1 — равноценно, 3 — умеренно важнее, 5 — существенно, 7 — значительно, 9 — абсолютно. Обратные значения задаются автоматически.</p>
+              <div class="table-scroll weights-scroll">
+                <table class="weights-table" id="weightsTable">
+                  <thead id="weightsHead"></thead>
+                  <tbody id="weightsBody"></tbody>
+                </table>
+              </div>
+              <div class="weights-actions">
+                <button class="btn btn-ghost btn-sm" type="button" id="resetWeightsBtn">Сбросить к сбалансированным</button>
+                <button class="btn btn-ghost btn-sm" type="button" id="equalWeightsBtn">Равные веса</button>
+              </div>
+            </div>
+
+            <aside class="stack">
+              <div class="card card-pad consistency-card" id="consistencyCard">
+                <span class="card-kicker">Согласованность</span>
+                <div class="cr-value"><strong id="crValue">—</strong><span>CR</span></div>
+                <div class="cr-meter"><span id="crMeterFill"></span></div>
+                <p id="crAdvice" class="small muted">Заполните матрицу, чтобы увидеть оценку.</p>
+                <div class="cr-threshold">Порог CR ≤ 0.10</div>
+              </div>
+              <div class="card card-pad">
+                <div class="card-heading">
+                  <div>
+                    <span class="card-kicker">Итог</span>
+                    <h3>Веса категорий</h3>
+                  </div>
+                </div>
+                <div id="weightBars" class="weight-bars"></div>
+                <p class="stat-note">Сумма весов всегда равна 1. Если категория отключена, её вес перераспределяется.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- НАСТРОЙКИ -->
+        <section class="view" id="view-settings" data-view="settings" hidden>
+          <div class="view-heading">
+            <div>
+              <h2>Настройки</h2>
+              <p class="muted">Аккаунт, категории, данные и приватность.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Аккаунт</span>
+                  <h3 id="settingsAccountTitle">Гостевой режим</h3>
+                </div>
+                <span class="badge" id="settingsAccountBadge">локально</span>
+              </div>
+              <div id="settingsAccountBody"></div>
+            </div>
+
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Категории</span>
+                  <h3>Что отслеживать</h3>
+                </div>
+              </div>
+              <div id="categoryToggles" class="category-toggles"></div>
+              <p class="stat-note">Минимум две категории. Отключённые не показываются в форме и не участвуют в общей оценке.</p>
+            </div>
+
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Приватность</span>
+                  <h3>Анонимная агрегация</h3>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="researchConsent">
+                  <span class="switch-track"></span>
+                </label>
+              </div>
+              <p class="small muted">Разрешить использовать средние по категориям для популяционных ориентиров. Отдельные записи и заметки не передаются. Нужно минимум 5 участников.</p>
+              <a class="text-link" href="/privacy.html" target="_blank" rel="noopener">Политика конфиденциальности</a>
+            </div>
+
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Данные</span>
+                  <h3>Экспорт и резервные копии</h3>
+                </div>
+              </div>
+              <div class="stack">
+                <button class="btn btn-outline btn-block" type="button" id="settingsExportBtn">Скачать JSON</button>
+                <button class="btn btn-outline btn-block" type="button" id="settingsCsvBtn">Скачать CSV</button>
+                <button class="btn btn-outline btn-block" type="button" id="settingsImportBtn">Импортировать JSON</button>
+                <input type="file" id="settingsImportFile" accept="application/json,.json" hidden>
+                <button class="btn btn-ghost btn-block" type="button" id="loadDemoSettings">Загрузить демо-данные</button>
+                <button class="btn btn-danger btn-block" type="button" id="clearDataBtn">Удалить все записи</button>
+              </div>
+            </div>
+
+            <div class="card card-pad">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Приложение</span>
+                  <h3>Установка и тема</h3>
+                </div>
+              </div>
+              <div class="stack">
+                <button class="btn btn-outline btn-block" type="button" id="settingsInstallBtn">Установить приложение</button>
+                <label class="settings-row">
+                  <span>Тёмная тема</span>
+                  <span class="switch">
+                    <input type="checkbox" id="themeSwitch">
+                    <span class="switch-track"></span>
+                  </span>
+                </label>
+                <div class="settings-row">
+                  <span>Версия</span>
+                  <span class="muted">2.0.0</span>
+                </div>
+                <a class="text-link" href="/">О продукте и методах</a>
+              </div>
+            </div>
+
+            <div class="card card-pad danger-zone">
+              <div class="card-heading">
+                <div>
+                  <span class="card-kicker">Опасная зона</span>
+                  <h3>Удаление аккаунта</h3>
+                </div>
+              </div>
+              <p class="small muted">Аккаунт, записи, настройки и сессии будут удалены. Это действие нельзя отменить.</p>
+              <button class="btn btn-danger btn-block" type="button" id="deleteAccountBtn" disabled>Удалить аккаунт</button>
+              <p class="stat-note" id="deleteAccountHint">Доступно только при входе в аккаунт.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Мобильная навигация">
+      <button class="mobile-nav-item is-active" type="button" data-view="today">
+        <span data-icon="calendar"></span><span>Сегодня</span>
+      </button>
+      <button class="mobile-nav-item" type="button" data-view="history">
+        <span data-icon="list"></span><span>История</span>
+      </button>
+      <button class="mobile-nav-item" type="button" data-view="forecast">
+        <span data-icon="target"></span><span>Прогноз</span>
+      </button>
+      <button class="mobile-nav-item" type="button" data-view="insights">
+        <span data-icon="spark"></span><span>Связи</span>
+      </button>
+      <button class="mobile-nav-item" type="button" data-view="settings">
+        <span data-icon="settings"></span><span>Ещё</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="modal-root" id="modalRoot"></div>
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <noscript>
+    <div class="noscript">Для работы дневника нужен JavaScript. Включите его в настройках браузера.</div>
+  </noscript>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+app = "knowtomorrow"
+primary_region = "ams"
+
+[build]
+  image = "node:24-alpine"
+
+[env]
+  NODE_ENV = "production"
+  DATA_DIR = "/data"
+  HOST = "0.0.0.0"
+  PORT = "8080"
+  COOKIE_SECURE = "true"
+  TRUST_PROXY = "1"
+  MIN_PRIOR_USERS = "5"
+
+[[mounts]]
+  source = "knowtomorrow_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.checks]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/api/health"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

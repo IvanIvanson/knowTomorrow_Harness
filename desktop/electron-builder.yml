@@ -1,0 +1,51 @@
+appId: ru.knowtomorrow.app
+productName: KnowTomorrow
+copyright: Copyright © 2026 KnowTomorrow
+directories:
+  output: dist
+  buildResources: build
+files:
+  - main.cjs
+  - config.json
+  - package.json
+asar: true
+compression: normal
+artifactName: KnowTomorrow-${version}-${os}-${arch}.${ext}
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  icon: build/icon.ico
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+
+mac:
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  category: public.app-category.lifestyle
+  icon: ../public/assets/icons/icon-512.png
+  hardenedRuntime: true
+
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Utility
+  icon: ../public/assets/icons/icon-512.png
+
+publish:
+  provider: github
+  owner: IvanIvanson
+  repo: knowTomorrow_Deepseek
+  releaseType: release

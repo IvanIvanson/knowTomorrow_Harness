@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax check
+        run: |
+          for file in \
+            server/*.mjs shared/*.mjs public/js/*.js scripts/*.mjs; do
+            node --check "$file"
+          done
+      - name: Unit and API tests
+        run: npm test
+      - name: Check local assets and manifest icons
+        run: node scripts/check-assets.mjs
+      - name: Smoke test static server
+        run: |
+          node server/index.mjs &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/api/health >/dev/null; then break; fi
+            sleep 0.5
+          done
+          curl -fsS http://127.0.0.1:8080/ | grep -q "KnowTomorrow"
+          curl -fsS http://127.0.0.1:8080/app | grep -q "app-content"
+          curl -fsS http://127.0.0.1:8080/manifest.webmanifest | grep -q "start_url"
+          kill $SERVER_PID

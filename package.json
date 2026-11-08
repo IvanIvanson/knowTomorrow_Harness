@@ -1,0 +1,27 @@
+{
+  "name": "knowtomorrow",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "KnowTomorrow — дневник состояния с объяснимыми покритериальными прогнозами",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node server/index.mjs",
+    "dev": "node --watch server/index.mjs",
+    "test": "node tests/analytics.test.mjs && node tests/api.test.mjs",
+    "test:analytics": "node tests/analytics.test.mjs",
+    "test:api": "node tests/api.test.mjs",
+    "check": "node scripts/check-assets.mjs",
+    "research": "node scripts/research-report.mjs"
+  },
+  "keywords": [
+    "mood",
+    "forecast",
+    "explainable",
+    "ahp",
+    "pwa"
+  ],
+  "license": "MIT"
+}
