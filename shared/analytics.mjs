@@ -930,7 +930,10 @@ function predictionInterval(residuals, value, fallbackSd) {
  */
 export function forecastTarget(series, target, options = {}) {
   const spec = featureSpec(target, true);
-  const rows = buildRows(series, target, spec);
+  const allRows = buildRows(series, target, spec);
+  // Для модели достаточно последнего года: дальше растёт только время обучения,
+  // а не качество. Паттерны при этом считаются по всей истории.
+  const rows = allRows.slice(-365);
   const values = targetValues(series, target);
   const n = values.length;
   const lastEntry = series.entries[series.entries.length - 1] || null;

@@ -2,7 +2,7 @@ app = "knowtomorrow"
 primary_region = "ams"
 
 [build]
-  image = "node:24-alpine"
+  dockerfile = "Dockerfile"
 
 [env]
   NODE_ENV = "production"
