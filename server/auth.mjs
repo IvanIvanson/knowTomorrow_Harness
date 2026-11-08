@@ -44,8 +44,14 @@ export function parseCookies(header) {
     const index = part.indexOf('=');
     if (index < 0) return;
     const key = part.slice(0, index).trim();
-    const value = part.slice(index + 1).trim();
-    if (key) result[key] = decodeURIComponent(value);
+    const rawValue = part.slice(index + 1).trim();
+    let value = rawValue;
+    try {
+      value = decodeURIComponent(rawValue);
+    } catch {
+      value = rawValue;
+    }
+    if (key) result[key] = value;
   });
   return result;
 }

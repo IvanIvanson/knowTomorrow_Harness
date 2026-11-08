@@ -226,9 +226,14 @@ export function weekdayBars(container, { items }) {
   const plotH = height - pad.top - pad.bottom;
   const barW = Math.min(34, (plotW / items.length) * 0.58);
   const y = (value) => pad.top + ((10 - value) / 9) * plotH;
-  const maxIndex = valid.reduce((best, item, index) =>
-    item.mean > (valid[best]?.mean ?? 0) ? index : best
-  , 0);
+  let maxIndex = 0;
+  let maxMean = -Infinity;
+  items.forEach((item, index) => {
+    if (Number.isFinite(item.mean) && item.mean > maxMean) {
+      maxMean = item.mean;
+      maxIndex = index;
+    }
+  });
 
   const bars = items
     .map((item, index) => {

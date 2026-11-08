@@ -94,7 +94,9 @@ async function staleWhileRevalidate(request) {
       return response;
     })
     .catch(() => null);
-  return cached || network;
+  if (cached) return cached;
+  const fresh = await network;
+  return fresh || new Response('', { status: 504, statusText: 'Offline' });
 }
 
 self.addEventListener('fetch', (event) => {

@@ -516,7 +516,9 @@ function updateOverallPreview() {
   const overall = computeOverall(ratings, state.settings.weights, state.settings.enabled);
   const preview = document.getElementById('overallPreview');
   if (preview) preview.textContent = overall === null ? '—' : formatScore(overall);
-  const filled = Object.values(ratings).filter((value) => value !== null && value !== undefined).length;
+  const filled = activeCategories(state).filter(
+    (cat) => ratings[cat] !== null && ratings[cat] !== undefined
+  ).length;
   const hint = document.getElementById('overallHint');
   if (hint) {
     if (filled === 0) {
@@ -567,7 +569,9 @@ function saveToday(event) {
   event?.preventDefault();
   if (!draft) return;
   const ratings = currentDraftRatings();
-  const filled = Object.values(ratings).filter((value) => value !== null && value !== undefined);
+  const filled = activeCategories(state).filter(
+    (cat) => ratings[cat] !== null && ratings[cat] !== undefined
+  );
   if (!filled.length) {
     toast('Поставьте хотя бы одну оценку.', 'error');
     return;
