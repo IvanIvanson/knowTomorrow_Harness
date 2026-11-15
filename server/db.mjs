@@ -43,6 +43,16 @@ const SCHEMA = `
     created_at TEXT NOT NULL,
     meta TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS metrics_daily (
+    day TEXT NOT NULL,
+    type TEXT NOT NULL,
+    target TEXT NOT NULL,
+    count INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (day, type, target)
+  );
+  CREATE INDEX IF NOT EXISTS metrics_day_idx ON metrics_daily(day);
 `;
 
 export function openDatabase(dataDir) {
@@ -62,6 +72,20 @@ export function recordEvent(db, type, meta = null) {
   } catch {
     // События не должны ломать основной запрос.
   }
+}
+
+/**
+ * Обезличенный счётчик: только день, тип и цель. Без IP, cookie и user id.
+ */
+export function recordMetric(db, type, target, date = new Date()) {
+  const day = date.toISOString().slice(0, 10);
+  const now = new Date().toISOString();
+  db.prepare(
+    `INSERT INTO metrics_daily (day, type, target, count, updated_at)
+     VALUES (?, ?, ?, 1, ?)
+     ON CONFLICT(day, type, target)
+     DO UPDATE SET count = count + 1, updated_at = excluded.updated_at`
+  ).run(day, type, target, now);
 }
 
 export function cleanupExpired(db) {

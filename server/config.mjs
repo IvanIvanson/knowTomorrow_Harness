@@ -25,9 +25,13 @@ export function loadConfig(env = process.env) {
     appOrigin: env.APP_ORIGIN || '',
     minPriorUsers: Number(env.MIN_PRIOR_USERS) || 5,
     maxBodyBytes: Number(env.MAX_BODY_BYTES) || 2 * 1024 * 1024,
+    adminToken: String(env.ADMIN_TOKEN || '').trim(),
+    adminSessionHours: Number(env.ADMIN_SESSION_HOURS) || 12,
     rateLimits: {
       auth: Number(env.AUTH_RATE_LIMIT) || 12,
       write: Number(env.WRITE_RATE_LIMIT) || 120,
+      metrics: Number(env.METRICS_RATE_LIMIT) || 300,
+      adminLogin: Number(env.ADMIN_LOGIN_RATE_LIMIT) || 8,
       windowMs: 15 * 60 * 1000
     }
   };

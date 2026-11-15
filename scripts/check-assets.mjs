@@ -5,7 +5,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const publicDir = path.join(root, 'public');
-const pages = ['index.html', 'app.html', 'privacy.html'];
+const pages = ['index.html', 'app.html', 'privacy.html', 'admin.html'];
 const errors = [];
 
 function resolvePublic(url) {

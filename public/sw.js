@@ -1,6 +1,6 @@
 /* KnowTomorrow service worker: офлайн-оболочка без кэширования API. */
 
-const VERSION = 'knowtomorrow-v2.0.1';
+const VERSION = 'knowtomorrow-v2.0.2';
 const SHELL_CACHE = `${VERSION}-shell`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
@@ -19,6 +19,7 @@ const SHELL = [
   '/js/icons.js',
   '/js/ui.js',
   '/js/charts.js',
+  '/js/metrics.js',
   '/js/legal.js',
   '/assets/logo.png',
   '/assets/icons/icon-192.png',

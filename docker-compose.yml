@@ -12,6 +12,7 @@ services:
       # Для локального HTTP. В production за HTTPS поставьте true.
       COOKIE_SECURE: "false"
       TRUST_PROXY: "0"
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
       # APP_ORIGIN: https://knowtomorrow.example
     healthcheck:
       test:

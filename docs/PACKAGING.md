@@ -27,7 +27,7 @@ PWA — основной и самый быстрый способ. Нативн
 
 - Manifest без ошибок;
 - Service Workers: `activated and running`;
-- Cache Storage: `knowtomorrow-v2.0.1-shell` и `...-assets`;
+- Cache Storage: `knowtomorrow-v2.0.2-shell` и `...-assets`;
 - Lighthouse → PWA: установка и офлайн.
 
 В Chrome установка доступна по иконке в адресной строке или меню
@@ -36,7 +36,7 @@ PWA — основной и самый быстрый способ. Нативн
 ### Обновление версии
 
 При изменении статики поднимите `VERSION` в `public/sw.js`
-(`knowtomorrow-v2.0.1` → `knowtomorrow-v2.0.2`). Старый кэш удалится в
+(`knowtomorrow-v2.0.2` → `knowtomorrow-v2.0.3`). Старый кэш удалится в
 `activate`, новый service worker возьмёт управление после перезагрузки.
 
 ### HTTPS

@@ -94,7 +94,8 @@ function serveFile(req, res, filePath, config, options = {}) {
     'X-Frame-Options': 'DENY',
     'Content-Security-Policy': CSP,
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
-    Vary: 'Accept-Encoding'
+    Vary: 'Accept-Encoding',
+    ...(options.headers || {})
   };
   if (isSecure(req, config)) {
     headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
@@ -158,6 +159,18 @@ export function createStaticHandler({ publicDir, sharedDir, config }) {
 
     if (pathname === '/app' || pathname === '/app/' || pathname === '/app.html') {
       if (serveFile(req, res, path.join(publicDir, 'app.html'), config, { cacheControl: 'no-cache' })) {
+        return true;
+      }
+      return false;
+    }
+
+    if (pathname === '/admin' || pathname === '/admin/' || pathname === '/admin.html') {
+      if (
+        serveFile(req, res, path.join(publicDir, 'admin.html'), config, {
+          cacheControl: 'no-cache',
+          headers: { 'X-Robots-Tag': 'noindex, nofollow' }
+        })
+      ) {
         return true;
       }
       return false;

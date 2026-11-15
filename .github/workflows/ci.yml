@@ -34,5 +34,6 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8080/ | grep -q "KnowTomorrow"
           curl -fsS http://127.0.0.1:8080/app | grep -q "app-content"
+          curl -fsS http://127.0.0.1:8080/admin | grep -q "ADMIN_TOKEN"
           curl -fsS http://127.0.0.1:8080/manifest.webmanifest | grep -q "start_url"
           kill $SERVER_PID

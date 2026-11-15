@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Админка — KnowTomorrow</title>
+  <meta name="theme-color" content="#0c2338">
+  <link rel="icon" href="/assets/icons/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-body">
+  <header class="admin-header">
+    <a class="brand" href="/" aria-label="KnowTomorrow">
+      <span class="brand-mark"><img src="/assets/logo.png" alt=""></span>
+      <span class="brand-name">Know<span class="brand-t">T</span>omorrow</span>
+    </a>
+    <div class="admin-header-actions">
+      <span class="admin-status" id="adminStatus">Проверка доступа…</span>
+      <button class="btn btn-ghost btn-sm hidden" type="button" id="logoutBtn">Выйти</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <section class="admin-login" id="loginView">
+      <div class="admin-login-card">
+        <span class="eyebrow">Админка</span>
+        <h1>Статистика просмотров и скачиваний</h1>
+        <p class="lead">Введите административный токен. Он задаётся на сервере переменной <code>ADMIN_TOKEN</code> и не хранится в браузере.</p>
+        <form class="admin-login-form" id="adminLoginForm" novalidate>
+          <div class="form-error" id="loginError" role="alert"></div>
+          <div class="field">
+            <label for="adminToken">ADMIN_TOKEN</label>
+            <input id="adminToken" name="token" type="password" autocomplete="current-password" required placeholder="Длинный случайный токен">
+          </div>
+          <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">Открыть статистику</button>
+        </form>
+        <p class="admin-login-hint" id="loginHint">Токен должен быть не короче 12 символов. Если админка не настроена, задайте <code>ADMIN_TOKEN</code> в окружении сервера и перезапустите его.</p>
+      </div>
+    </section>
+
+    <section id="dashboard" class="hidden" aria-live="polite">
+      <div class="admin-title-row">
+        <div>
+          <span class="eyebrow">Админка</span>
+          <h1>Просмотры и скачивания</h1>
+          <p id="generatedAt">Данные загружаются…</p>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-outline btn-sm" type="button" id="refreshBtn">Обновить</button>
+        </div>
+      </div>
+
+      <div class="admin-error hidden" id="dashboardError" role="alert"></div>
+
+      <div class="kpi-grid">
+        <article class="kpi-card accent">
+          <span class="kpi-label">Всего просмотров</span>
+          <div class="kpi-value" id="totalViews">—</div>
+          <p class="kpi-foot">главная + приложение</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">Скачивания</span>
+          <div class="kpi-value" id="totalDownloads">—</div>
+          <p class="kpi-foot">клики по кнопкам загрузки</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">PWA-установки</span>
+          <div class="kpi-value" id="totalInstalls">—</div>
+          <p class="kpi-foot">события appinstalled</p>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-label">Сегодня</span>
+          <div class="kpi-value" id="todayViews">—</div>
+          <p class="kpi-foot">просмотров за сегодня (UTC)</p>
+        </article>
+      </div>
+
+      <div class="period-grid">
+        <article class="period-card">
+          <h3>Сегодня</h3>
+          <div id="periodToday"></div>
+        </article>
+        <article class="period-card">
+          <h3>7 дней</h3>
+          <div id="period7"></div>
+        </article>
+        <article class="period-card">
+          <h3>30 дней</h3>
+          <div id="period30"></div>
+        </article>
+        <article class="period-card">
+          <h3>Всё время</h3>
+          <div id="periodAll"></div>
+        </article>
+      </div>
+
+      <section class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>За последние 30 дней</h2>
+            <p>Просмотры страниц и клики по кнопкам скачивания</p>
+          </div>
+          <div class="chart-legend">
+            <span><i class="chart-dot views"></i> Просмотры</span>
+            <span><i class="chart-dot downloads"></i> Скачивания</span>
+          </div>
+        </div>
+        <div class="admin-chart" id="adminChart"></div>
+      </section>
+
+      <div class="admin-grid">
+        <section class="admin-card">
+          <div class="admin-card-head">
+            <div>
+              <h2>Страницы</h2>
+              <p>Просмотры лендинга и приложения</p>
+            </div>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr><th>Страница</th><th>Просмотры</th></tr>
+            </thead>
+            <tbody id="pagesTable"></tbody>
+          </table>
+        </section>
+
+        <section class="admin-card">
+          <div class="admin-card-head">
+            <div>
+              <h2>Скачивания</h2>
+              <p>Клики по платформам</p>
+            </div>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr><th>Платформа</th><th>Клики</th></tr>
+            </thead>
+            <tbody id="downloadsTable"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <section class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>Все события</h2>
+            <p>Агрегированные счётчики по типам и целям</p>
+          </div>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Событие</th><th>Количество</th></tr>
+          </thead>
+          <tbody id="allMetricsTable"></tbody>
+        </table>
+      </section>
+
+      <p class="admin-note">Статистика обезличена: хранятся только дневные счётчики по типу события и цели. IP-адреса, cookie пользователей, email и содержимое дневников не сохраняются в метриках. Счётчики скачиваний фиксируют клики по кнопкам, а не факт завершённой загрузки файла; PWA-установки учитываются отдельным событием <code>appinstalled</code>.</p>
+    </section>
+  </main>
+
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

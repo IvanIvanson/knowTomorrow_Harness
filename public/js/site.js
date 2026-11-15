@@ -1,4 +1,5 @@
 import { api, ApiError } from './api.js';
+import { trackEvent } from './metrics.js';
 import {
   detectPlatform,
   isStandalone,
@@ -99,6 +100,7 @@ function initInstall() {
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
     setInstallState(true);
+    trackEvent('install', 'pwa');
     toast('KnowTomorrow установлен. Откройте иконку на рабочем столе.', 'success');
   });
 
@@ -126,8 +128,7 @@ function initInstall() {
   document.getElementById('heroInstall')?.addEventListener('click', install);
 }
 
-function initPlatform() {
-  const platform = detectPlatform();
+function initPlatform() {  const platform = detectPlatform();
   const badge = document.getElementById('platformBadge');
   if (badge) badge.textContent = `Вы открыли: ${platformLabel(platform)}`;
   document.querySelectorAll('[data-platform]').forEach((card) => {
@@ -308,6 +309,14 @@ function initFaq() {
   });
 }
 
+function initDownloadTracking() {
+  document.querySelectorAll('[data-download]').forEach((element) => {
+    element.addEventListener('click', () => {
+      trackEvent('download', element.dataset.download);
+    });
+  });
+}
+
 function initYear() {
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
@@ -316,8 +325,10 @@ function initYear() {
 initHeader();
 initReveal();
 initInstall();
+initDownloadTracking();
 initPlatform();
 initStats();
 initAuth();
 initFaq();
 initYear();
+trackEvent('view', 'landing');

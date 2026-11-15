@@ -69,7 +69,9 @@ test.before(async () => {
     trustProxy: false,
     appOrigin: '',
     minPriorUsers: 3,
-    rateLimits: { auth: 100, write: 200, windowMs: 60_000 }
+    adminToken: 'test-admin-token-123',
+    adminSessionHours: 12,
+    rateLimits: { auth: 100, write: 200, metrics: 500, adminLogin: 100, windowMs: 60_000 }
   };
   app = createApp(config);
   await new Promise((resolve) => app.server.listen(0, '127.0.0.1', resolve));
@@ -295,6 +297,62 @@ test('Удаление аккаунта требует пароль и удал�
 
   const after = await request('/api/auth/me', { cookie: account.cookie });
   assert.equal(after.json.user, null);
+});
+
+test('Метрики и админка: события, вход по токену и агрегаты', async () => {
+  const invalid = await request('/api/metrics/event', {
+    method: 'POST',
+    body: { type: 'download', target: 'landing' }
+  });
+  assert.equal(invalid.status, 400);
+
+  for (const event of [
+    { type: 'view', target: 'landing' },
+    { type: 'view', target: 'app' },
+    { type: 'download', target: 'windows' }
+  ]) {
+    const response = await request('/api/metrics/event', { method: 'POST', body: event });
+    assert.equal(response.status, 202);
+  }
+
+  const session = await request('/api/admin/session');
+  assert.equal(session.status, 200);
+  assert.equal(session.json.configured, true);
+  assert.equal(session.json.authenticated, false);
+
+  const wrong = await request('/api/admin/login', {
+    method: 'POST',
+    body: { token: 'wrong-token-12345' }
+  });
+  assert.equal(wrong.status, 401);
+
+  const login = await request('/api/admin/login', {
+    method: 'POST',
+    body: { token: 'test-admin-token-123' }
+  });
+  assert.equal(login.status, 200);
+  assert.ok(login.cookie?.startsWith('kt_admin='));
+
+  const stats = await request('/api/admin/stats', { cookie: login.cookie });
+  assert.equal(stats.status, 200);
+  assert.equal(stats.json.totals.views, 2);
+  assert.equal(stats.json.totals.downloads, 1);
+  assert.ok(stats.json.byTarget.some((row) => row.type === 'view' && row.target === 'landing'));
+  assert.equal(stats.json.daily.length, 30);
+
+  const adminPage = await request('/admin');
+  assert.equal(adminPage.status, 200);
+  assert.match(adminPage.headers.get('x-robots-tag'), /noindex/);
+
+  const logout = await request('/api/admin/logout', {
+    method: 'POST',
+    cookie: login.cookie
+  });
+  assert.equal(logout.status, 200);
+  assert.match(logout.headers.get('set-cookie'), /Max-Age=0/);
+
+  const afterLogout = await request('/api/admin/stats');
+  assert.equal(afterLogout.status, 401);
 });
 
 test('Защита от обхода каталога и раздача shared-модулей', async () => {

@@ -1,4 +1,5 @@
 import { api, ApiError } from './api.js';
+import { trackEvent } from './metrics.js';
 import { CATEGORY_ICON, svgIcon } from './icons.js';
 import { intervalBar, lineChart, radarChart, weekdayBars } from './charts.js';
 import {
@@ -1787,6 +1788,7 @@ function installPWA() {
     toast('Приложение уже установлено.', 'info');
     return;
   }
+  trackEvent('download', 'pwa');
   if (deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice?.then((choice) => {
@@ -1944,6 +1946,7 @@ function bindEvents() {
   });
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
+    trackEvent('install', 'pwa');
     toast('KnowTomorrow установлен.', 'success');
   });
 }
@@ -1962,6 +1965,7 @@ async function boot() {
   applyTheme(state.settings.theme);
   bindEvents();
   renderAll();
+  trackEvent('view', 'app');
   if (!navigator.onLine) document.getElementById('offlineBadge')?.classList.remove('hidden');
 
   const hash = window.location.hash.replace('#', '');

@@ -53,6 +53,30 @@ environment:
 | `MAX_BODY_BYTES` | `2097152` | Лимит тела |
 | `AUTH_RATE_LIMIT` | `12` | Попыток auth / 15 мин |
 | `WRITE_RATE_LIMIT` | `120` | Записей / 15 мин |
+| `METRICS_RATE_LIMIT` | `300` | Событий метрик / 15 мин |
+| `ADMIN_LOGIN_RATE_LIMIT` | `8` | Попыток входа в админку / 15 мин |
+| `ADMIN_TOKEN` | — | Токен `/admin`, ≥ 12 символов; без него админка отключена |
+| `ADMIN_SESSION_HOURS` | `12` | Срок cookie админки |
+
+## Админка и статистика
+
+Сгенерируйте длинный токен и задайте его только на сервере:
+
+```bash
+openssl rand -hex 32
+# Render/Fly/VPS: ADMIN_TOKEN=<токен>
+```
+
+После перезапуска откройте `/admin`, введите токен. Cookie админки —
+HttpOnly, SameSite=Strict. Токен не попадает в URL, логи и localStorage.
+
+Метрики обезличены: дневные счётчики `(day, type, target)` для просмотров
+`landing/app`, кликов по кнопкам скачивания и `appinstalled`. IP не
+сохраняется. Начальные значения можно посмотреть в админке; сбросить счётчики
+можно SQL-запросом `DELETE FROM metrics_daily;` (сделайте бэкап).
+
+В Render задайте `ADMIN_TOKEN` как secret environment variable; в Fly —
+`fly secrets set ADMIN_TOKEN=...`. Не коммитьте токен в репозиторий.
 
 ## Обратный прокси
 
@@ -157,7 +181,8 @@ docker compose start
 - [ ] Постоянный диск и бэкапы.
 - [ ] Ограниченный доступ к серверу и файлу БД.
 - [ ] `APP_ORIGIN` задан.
-- [ ] Проверены `/`, `/app`, `/manifest.webmanifest`, `/sw.js`.
+- [ ] `ADMIN_TOKEN` — длинный случайный секрет, хранится только в env/секретах.
+- [ ] Проверены `/`, `/app`, `/admin`, `/manifest.webmanifest`, `/sw.js`.
 - [ ] Проверена регистрация и конфликт версий.
 - [ ] Политика конфиденциальности доступна по `/privacy.html`.
 - [ ] Настроен мониторинг диска.

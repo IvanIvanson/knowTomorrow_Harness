@@ -249,6 +249,72 @@
 
 Удаляет пользователя, состояние и сессии каскадно. Ответ `200 { "ok": true }`.
 
+## Метрики
+
+### POST `/api/metrics/event`
+
+Публичный обезличенный счётчик. Без cookie и user id.
+
+```json
+{ "type": "view", "target": "landing" }
+```
+
+Допустимые пары:
+
+| type | target |
+|---|---|
+| `view` | `landing`, `app` |
+| `download` | `windows`, `macos-linux`, `android`, `ios`, `pwa` |
+| `install` | `pwa` |
+
+Ответ `202 { "ok": true }`. Сервер хранит только дневной счётчик
+`(day, type, target)`; IP-адрес используется для rate limit и не сохраняется.
+
+## Админка
+
+Доступ по переменной окружения `ADMIN_TOKEN` (≥ 12 символов). Cookie
+`kt_admin` — HttpOnly, SameSite=Strict, срок 12 часов.
+
+### GET `/api/admin/session`
+
+```json
+{ "configured": true, "authenticated": false }
+```
+
+### POST `/api/admin/login`
+
+```json
+{ "token": "длинный-случайный-токен" }
+```
+
+Ответ `200 { "ok": true }` и `Set-Cookie: kt_admin=...`. Без настроенного
+`ADMIN_TOKEN` — `503`; неверный токен — `401`.
+
+### POST `/api/admin/logout`
+
+Очищает cookie админки.
+
+### GET `/api/admin/stats`
+
+Требует cookie админки.
+
+```json
+{
+  "generatedAt": "...",
+  "totals": { "views": 120, "downloads": 8, "installs": 3 },
+  "today": { "views": 4, "downloads": 0, "installs": 0 },
+  "last7": { "views": 31, "downloads": 2, "installs": 1 },
+  "last30": { "views": 100, "downloads": 7, "installs": 2 },
+  "byTarget": [{ "type": "view", "target": "landing", "count": 80 }],
+  "daily": [{ "day": "2026-11-15", "views": 4, "downloads": 0, "installs": 0 }],
+  "lastEventAt": "...",
+  "labels": { "view": "Просмотры" }
+}
+```
+
+`daily` — 30 дней по UTC. Счётчики скачиваний фиксируют клики по кнопкам, а
+`install` — событие `appinstalled`.
+
 ## Health
 
 ### GET `/api/health`
@@ -266,7 +332,8 @@
 - Cookie: HttpOnly, SameSite=Lax, Secure при HTTPS.
 - CSRF: проверка `Origin` для POST/PUT/PATCH/DELETE; same-origin.
 - CSP: `default-src 'self'`, без inline-скриптов, без внешних CDN.
-- Rate limit: 12 попыток auth и 120 записей на 15 минут (настраивается).
+- Rate limit: 12 попыток auth, 120 записей, 8 попыток входа в админку и 300
+  событий метрик на 15 минут (настраивается).
 - Ограничение тела: 2 МБ.
 - SQLite: prepared statements, WAL, foreign keys.
 - Логи: только типы событий, без содержимого дневника.

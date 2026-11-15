@@ -15,7 +15,15 @@ import {
   sessionUser,
   verifyPassword
 } from './auth.mjs';
-import { recordEvent } from './db.mjs';
+import { recordEvent, recordMetric } from './db.mjs';
+import {
+  adminConfigured,
+  clearAdminCookie,
+  isAdmin,
+  setAdminCookie,
+  verifyAdminToken
+} from './admin-auth.mjs';
+import { getMetricsStats } from './metrics.mjs';
 import {
   HttpError,
   clientIp,
@@ -79,6 +87,73 @@ export function createApi({ db, config, limiter }) {
         version: '2.0.1',
         time: new Date().toISOString()
       });
+      return;
+    }
+
+    // Обезличенная статистика: только тип события и цель, без IP и cookie.
+    if (path === '/api/metrics/event' && method === 'POST') {
+      rateLimit(
+        limiter,
+        `metric:${clientIp(req, config)}`,
+        config.rateLimits.metrics,
+        config.rateLimits.windowMs
+      );
+      const body = await readJson(req, 4096);
+      const allowedTargets = {
+        view: ['landing', 'app'],
+        download: ['windows', 'macos-linux', 'android', 'ios', 'pwa'],
+        install: ['pwa']
+      };
+      const type = typeof body.type === 'string' ? body.type : '';
+      const target = typeof body.target === 'string' ? body.target : '';
+      if (!allowedTargets[type]?.includes(target)) {
+        throw new HttpError(400, 'Неизвестное событие метрики');
+      }
+      recordMetric(db, type, target);
+      sendJson(res, 202, { ok: true });
+      return;
+    }
+
+    if (path === '/api/admin/session' && method === 'GET') {
+      sendJson(res, 200, {
+        configured: adminConfigured(config),
+        authenticated: isAdmin(req, config)
+      });
+      return;
+    }
+
+    if (path === '/api/admin/login' && method === 'POST') {
+      rateLimit(
+        limiter,
+        `admin-login:${clientIp(req, config)}`,
+        config.rateLimits.adminLogin,
+        config.rateLimits.windowMs
+      );
+      if (!adminConfigured(config)) {
+        throw new HttpError(503, 'Админка не настроена: задайте ADMIN_TOKEN на сервере');
+      }
+      const body = await readJson(req, 4096);
+      if (!verifyAdminToken(body.token, config)) {
+        recordEvent(db, 'admin_login_failed');
+        throw new HttpError(401, 'Неверный токен администратора');
+      }
+      setAdminCookie(res, req, config);
+      recordEvent(db, 'admin_login');
+      sendJson(res, 200, { ok: true });
+      return;
+    }
+
+    if (path === '/api/admin/logout' && method === 'POST') {
+      res.setHeader('Set-Cookie', clearAdminCookie(isSecureRequest(req, config)));
+      sendJson(res, 200, { ok: true });
+      return;
+    }
+
+    if (path === '/api/admin/stats' && method === 'GET') {
+      if (!isAdmin(req, config)) {
+        throw new HttpError(401, 'Требуется вход в админку');
+      }
+      sendJson(res, 200, getMetricsStats(db));
       return;
     }
 
