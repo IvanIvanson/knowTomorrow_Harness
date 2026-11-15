@@ -27,7 +27,7 @@ PWA — основной и самый быстрый способ. Нативн
 
 - Manifest без ошибок;
 - Service Workers: `activated and running`;
-- Cache Storage: `knowtomorrow-v2.0.0-shell` и `...-assets`;
+- Cache Storage: `knowtomorrow-v2.0.1-shell` и `...-assets`;
 - Lighthouse → PWA: установка и офлайн.
 
 В Chrome установка доступна по иконке в адресной строке или меню
@@ -36,7 +36,7 @@ PWA — основной и самый быстрый способ. Нативн
 ### Обновление версии
 
 При изменении статики поднимите `VERSION` в `public/sw.js`
-(`knowtomorrow-v2.0.0` → `knowtomorrow-v2.0.1`). Старый кэш удалится в
+(`knowtomorrow-v2.0.1` → `knowtomorrow-v2.0.2`). Старый кэш удалится в
 `activate`, новый service worker возьмёт управление после перезагрузки.
 
 ### HTTPS
@@ -75,7 +75,7 @@ npm run build
 ### CI
 
 1. Задайте repository variable `KNOWTOMORROW_APP_URL` = HTTPS-адрес сайта.
-2. Запустите workflow вручную или создайте тег `v2.0.0`.
+2. Запустите workflow вручную или создайте тег `v2.0.1`.
 3. На теге workflow соберёт три платформы и прикрепит файлы к GitHub Release.
 
 Без переменной tag-сборка завершится ошибкой — иначе установщик открывал бы
@@ -131,10 +131,10 @@ https://github.com/IvanIvanson/knowTomorrow_Deepseek/releases/latest
 
 Чтобы кнопки «Скачать для Windows», «Скачать APK» и «Открыть Releases» работали:
 
-1. Соберите desktop-workflow (tag `v2.0.0`).
+1. Соберите desktop-workflow (tag `v2.0.1`).
 2. Прикрепите APK к релизу (скачайте артефакт android-workflow).
 3. Убедитесь, что имена файлов понятны:
-   `KnowTomorrow-2.0.0-win-x64.exe`, `...-mac-arm64.dmg`, `...-linux-x86_64.AppImage`.
+   `KnowTomorrow-2.0.1-win-x64.exe`, `...-mac-arm64.dmg`, `...-linux-x86_64.AppImage`.
 
 Если релиза ещё нет, страница честно предлагает PWA.
 

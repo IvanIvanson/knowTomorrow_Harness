@@ -33,17 +33,29 @@ function initHeader() {
     window.addEventListener('scroll', onScroll, { passive: true });
   }
   if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('is-open');
+    const backdrop = document.getElementById('siteNavBackdrop');
+    const setOpen = (open) => {
+      nav.classList.toggle('is-open', open);
       toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
       toggle.innerHTML = `<svg class="icon" aria-hidden="true"><use href="#i-${open ? 'close' : 'menu'}"></use></svg>`;
-    });
+      document.body.classList.toggle('menu-open', open);
+      if (backdrop) backdrop.hidden = !open;
+    };
+
+    toggle.addEventListener('click', () => setOpen(!nav.classList.contains('is-open')));
+    backdrop?.addEventListener('click', () => setOpen(false));
     nav.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>';
-      });
+      link.addEventListener('click', () => setOpen(false));
+    });
+    document.querySelectorAll('.header-actions a, .header-inner > .brand').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.classList.contains('is-open')) setOpen(false);
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 960 && nav.classList.contains('is-open')) setOpen(false);
     });
   }
 }
@@ -188,11 +200,25 @@ function initAuth() {
     });
   });
 
+  // Кнопки «Попробовать KnowTomorrow» ведут к форме и сразу открывают регистрацию.
+  document.querySelectorAll('[data-auth-cta]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      activate(button.dataset.authCta || 'register');
+      const card = document.getElementById('authCard');
+      scrollToElement(card, 84);
+      window.setTimeout(() => {
+        const target = button.dataset.authCta === 'login' ? 'loginEmail' : 'registerName';
+        document.getElementById(target)?.focus({ preventScroll: true });
+      }, 450);
+    });
+  });
+
   const params = new URLSearchParams(window.location.search);
   const requested = params.get('auth');
   if (requested === 'register' || requested === 'login') {
     activate(requested);
-    window.setTimeout(() => scrollToElement(document.getElementById('start'), 76), 120);
+    window.setTimeout(() => scrollToElement(document.getElementById('authCard'), 84), 120);
   }
 
   const loginForm = document.getElementById('loginForm');

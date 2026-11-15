@@ -1,6 +1,6 @@
 /* KnowTomorrow service worker: офлайн-оболочка без кэширования API. */
 
-const VERSION = 'knowtomorrow-v2.0.0';
+const VERSION = 'knowtomorrow-v2.0.1';
 const SHELL_CACHE = `${VERSION}-shell`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
@@ -11,6 +11,7 @@ const SHELL = [
   '/manifest.webmanifest',
   '/css/base.css',
   '/css/site.css',
+  '/css/landing-v2.css',
   '/css/app.css',
   '/js/site.js',
   '/js/app.js',

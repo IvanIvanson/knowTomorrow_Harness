@@ -254,7 +254,7 @@
 ### GET `/api/health`
 
 ```json
-{ "ok": true, "service": "knowtomorrow", "version": "2.0.0", "time": "..." }
+{ "ok": true, "service": "knowtomorrow", "version": "2.0.1", "time": "..." }
 ```
 
 Используется Docker/Render/Fly healthcheck.

@@ -76,7 +76,7 @@ export function createApi({ db, config, limiter }) {
       sendJson(res, 200, {
         ok: true,
         service: 'knowtomorrow',
-        version: '2.0.0',
+        version: '2.0.1',
         time: new Date().toISOString()
       });
       return;

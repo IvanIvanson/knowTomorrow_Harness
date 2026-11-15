@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KnowTomorrow — дневник состояния с объяснимыми прогнозами</title>
-  <meta name="description" content="KnowTomorrow помогает заметить, что в вашей жизни связано с завтрашним настроением. Дневник по семи сферам, объяснимые связи и честные интервалы вместо гаданий.">
+  <title>KnowTomorrow — личный дневник наблюдений</title>
+  <meta name="description" content="KnowTomorrow — ежедневный трекер настроения, который помогает заметить, что влияет на вас: погода, дом, работа, самочувствие и бытовые события. Без карт и гороскопов. Только ваши записи и понятная аналитика.">
   <meta name="theme-color" content="#0c2338">
-  <meta property="og:title" content="KnowTomorrow — не гадание, а наблюдение за собой">
-  <meta property="og:description" content="Дневник состояния по семи сферам. Объяснимые связи, покритериальные прогнозы и проверка модели на ваших прошлых днях.">
+  <meta property="og:title" content="KnowTomorrow — понимайте, что влияет на вас сегодня">
+  <meta property="og:description" content="Личный дневник наблюдений: отмечайте семь сфер, находите свои триггеры и получайте осторожные гипотезы о следующем дне.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="/assets/logo.png">
   <link rel="icon" href="/assets/icons/favicon.png" type="image/png">
@@ -15,6 +15,7 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/site.css">
+  <link rel="stylesheet" href="/css/landing-v2.css">
 </head>
 <body class="site">
   <a class="skip-link" href="#main">Перейти к содержимому</a>
@@ -31,6 +32,14 @@
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2.5a9.5 9.5 0 00-3 18.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.2-.2-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.2 9.2 0 014.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.7-4.5 4.9.4.3.7 1 .7 2v3c0 .3.2.6.7.5a9.5 9.5 0 00-3-18.5z" fill="currentColor"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7.5 9 7.5M5.5 9.5V21h13V9.5M10 21v-6h4v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7M3 12h18" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 20c0-3.3 2.4-5.5 5.5-5.5s5.5 2.2 5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 5.2a3 3 0 010 5.6M17.5 14.8c2 .6 3.5 2.4 3.5 5.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.2 4.2 0 01-.4-8.4A6 6 0 0118.3 11 3.5 3.5 0 0117.5 18z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.5 6.2a4.2 4.2 0 00-5.3 5.3L4 16.7 7.3 20l5.2-5.2a4.2 4.2 0 005.3-5.3l-2.4 2.4-2.9-2.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4C12 4 5 8 5 15c0 2.1.8 3.9 2.2 5.2C10.5 12 15 9.7 18.5 8.6 15 12 12.3 15 10.5 20.2c.9.3 1.9.5 3 .5 7 0 9-7 9-16.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v6M12 7.5v.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
   </svg>
 
   <header class="site-header" id="top">
@@ -41,44 +50,46 @@
       </a>
       <nav class="site-nav" id="siteNav" aria-label="Основная навигация">
         <a href="#why">Зачем</a>
+        <a href="#what">Что внутри</a>
         <a href="#how">Как работает</a>
-        <a href="#features">Возможности</a>
-        <a href="#science">Наука</a>
+        <a href="#compare">Сравнение</a>
         <a href="#downloads">Скачать</a>
         <a href="#faq">Вопросы</a>
       </nav>
       <div class="header-actions">
         <a class="btn btn-ghost btn-sm header-login" href="?auth=login">Войти</a>
-        <a class="btn btn-primary btn-sm" href="#start">Начать</a>
+        <a class="btn btn-primary btn-sm" href="#start">Попробовать</a>
         <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Открыть меню">
           <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
         </button>
       </div>
     </div>
   </header>
+  <div class="site-nav-backdrop" id="siteNavBackdrop" hidden></div>
 
   <main id="main">
     <section class="hero">
       <div class="hero-orbit" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow">Дневник состояния · семь сфер</span>
-          <h1>Не гадание.<br><span class="accent">Наблюдение</span> за собой.</h1>
-          <p class="lead">Карты и гороскопы обещают знать будущее. KnowTomorrow предлагает другое: отмечать, что с вами происходит, и замечать, какие события связаны с завтрашним настроением.</p>
+          <span class="eyebrow">Личный дневник наблюдений · семь сфер</span>
+          <h1>Не гадайте, что будет завтра.<br><span class="accent">Понимайте</span>, что влияет на вас сегодня.</h1>
+          <p class="lead">KnowTomorrow — ежедневный трекер настроения, который анализирует ваше окружение, погоду, отношения дома и на работе, самочувствие и бытовые события. Без карт, кофейной гущи и гороскопов. Только ваши данные, понятная аналитика и персональные гипотезы о том, что может повлиять на ваш следующий день.</p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-lg" href="#start">
-              Начать вести дневник
+              Попробовать KnowTomorrow
               <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
             </a>
-            <button class="btn btn-outline btn-lg" id="heroInstall" type="button">
-              <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
-              Установить
-            </button>
+            <a class="btn btn-ghost btn-lg" href="/app?demo=1">Посмотреть демо</a>
           </div>
+          <p class="hero-disclaimer">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+            <span>Это инструмент для самонаблюдения, а не медицинская диагностика. Прогнозы в приложении — это гипотезы на основе ваших записей, а не «предсказания судьбы».</span>
+          </p>
           <ul class="hero-points">
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Бесплатно</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg> Данные под вашим контролем</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg> Работает офлайн</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg> Без карт и гороскопов</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg> Данные остаются у вас</li>
           </ul>
           <div class="hero-social" id="heroSocial">
             <span class="hero-social-dot"></span>
@@ -102,44 +113,44 @@
           <article class="preview-card">
             <div class="preview-top">
               <div>
-                <p class="preview-kicker">Гипотеза на завтра</p>
-                <p class="preview-date">9 ноября, воскресенье</p>
+                <p class="preview-kicker">Ваш день в цифрах</p>
+                <p class="preview-date">Сегодня, 15 ноября</p>
               </div>
-              <span class="badge badge--teal">средняя уверенность</span>
+              <span class="badge badge--teal">42 наблюдения</span>
             </div>
             <div class="preview-score">
-              <strong>6.9</strong>
-              <span class="preview-range">интервал 5.3–8.1</span>
+              <strong>7.1</strong>
+              <span class="preview-range">средняя за неделю</span>
             </div>
             <div class="preview-bars">
               <div class="preview-bar-row">
                 <span>Самочувствие</span>
                 <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="72" height="8" rx="4" fill="var(--teal)"/></svg>
-                <b>7.0</b>
+                <b>7.2</b>
               </div>
               <div class="preview-bar-row">
                 <span>Дом</span>
-                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="76" height="8" rx="4" fill="var(--teal)"/></svg>
-                <b>7.4</b>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="78" height="8" rx="4" fill="var(--teal)"/></svg>
+                <b>7.8</b>
               </div>
               <div class="preview-bar-row">
                 <span>Работа</span>
-                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="64" height="8" rx="4" fill="var(--amber)"/></svg>
-                <b>6.4</b>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="63" height="8" rx="4" fill="var(--amber)"/></svg>
+                <b>6.3</b>
               </div>
               <div class="preview-bar-row">
-                <span>Неживое</span>
-                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="56" height="8" rx="4" fill="var(--red)"/></svg>
-                <b>5.6</b>
+                <span>Погода</span>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none"><rect width="54" height="8" rx="4" fill="var(--red)"/></svg>
+                <b>5.4</b>
               </div>
             </div>
             <div class="preview-why">
-              <span class="preview-why-label">Почему</span>
-              <p>Вчерашняя поломка техники и низкое самочувствие тянут оценку вниз. День недели — наоборот, вверх.</p>
+              <span class="preview-why-label">Что влияет</span>
+              <p>Самочувствие и отношения дома тянут оценку вверх. Погода и бытовые сбои — вниз.</p>
             </div>
             <div class="preview-foot">
-              <span>Проверено на 42 прошлых днях</span>
-              <span class="preview-method">Ridge</span>
+              <span>На основе ваших записей</span>
+              <span class="preview-method">AHP-веса</span>
             </div>
           </article>
 
@@ -149,7 +160,7 @@
             </span>
             <div>
               <strong>Паттерн, а не пророчество</strong>
-              <p>После дней с низкой «неживой природой» следующий день в среднем на 0.5 балла ниже. n = 11, p = 0.003.</p>
+              <p>После дней с низким самочувствием следующий день в среднем на 0.8 балла ниже. Это повод заметить, а не приговор.</p>
             </div>
           </aside>
         </div>
@@ -159,170 +170,183 @@
     <section class="proof-strip">
       <div class="container proof-grid">
         <div class="proof-item"><strong>7</strong><span>сфер влияния</span></div>
-        <div class="proof-item"><strong>AHP</strong><span>веса и проверка CR</span></div>
-        <div class="proof-item"><strong>1–3–7</strong><span>временные лаги</span></div>
+        <div class="proof-item"><strong>AHP</strong><span>ваши веса и проверка CR</span></div>
+        <div class="proof-item"><strong>1–3–7</strong><span>дней — временные лаги</span></div>
         <div class="proof-item"><strong>walk-forward</strong><span>проверка на прошлом</span></div>
         <div class="proof-item"><strong>PWA</strong><span>телефон и компьютер</span></div>
       </div>
     </section>
 
     <section class="section" id="why">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">Позиция</span>
-          <h2>Почему это не очередное гадание</h2>
-          <p class="lead">Мы не утверждаем, что знаем будущее. Мы показываем, что можно проверить: ваши записи, повторяющиеся связи и границы уверенности.</p>
+      <div class="container why-layout">
+        <div class="why-heading reveal">
+          <span class="eyebrow">Почему это вообще нужно</span>
+          <h2>Мы привыкли искать ответы в случайных знаках. А ответы часто — в наших собственных днях.</h2>
         </div>
-        <div class="grid grid-3 why-grid">
-          <article class="card card-pad reveal">
-            <span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
-            <h3>Связи вместо пророчеств</h3>
-            <p>Лаги, корреляции и различия групп отвечают на вопрос «что было связано с чем», а не «что точно случится».</p>
-          </article>
-          <article class="card card-pad reveal">
-            <span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></span>
-            <h3>Честная неопределённость</h3>
-            <p>У каждого прогноза есть интервал, число наблюдений и результат проверки на прошлых днях. Если модель не лучше наивной — так и написано.</p>
-          </article>
-          <article class="card card-pad reveal">
-            <span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg></span>
-            <h3>Ваши данные — у вас</h3>
-            <p>Гостевой режим хранит всё в браузере. Аккаунт нужен только для синхронизации между устройствами. Экспорт и удаление — в один клик.</p>
-          </article>
+        <div class="why-copy reveal">
+          <p>Настроение редко меняется «просто так». На него влияют десятки вещей: сломался компьютер, облаяла собака, испортилась погода, возникло напряжение дома или на работе, подвело самочувствие. Мы редко замечаем эти связи по отдельности, но именно они складываются в то, как мы чувствуем себя завтра.</p>
+          <p><strong>KnowTomorrow помогает не угадывать, а видеть эти связи в ваших реальных записях.</strong></p>
+          <div class="why-points">
+            <span class="pill">ваши записи</span>
+            <span class="pill">ваши триггеры</span>
+            <span class="pill">ваши выводы</span>
+          </div>
+          <p class="why-quote">«Не магия. Наблюдение».</p>
         </div>
       </div>
     </section>
 
-    <section class="section section--soft" id="how">
+    <section class="section section--soft" id="what">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Что делает приложение</span>
+          <h2>Ваш день — по категориям, ваши закономерности — наглядно</h2>
+        </div>
+        <div class="category-grid">
+          <article class="category-card reveal tone-teal">
+            <span class="category-icon"><svg class="icon" aria-hidden="true"><use href="#i-cloud"></use></svg></span>
+            <h3>Погода и среда</h3>
+            <p>Снег, дождь, жара, духота, магнитные дни — отмечайте, как внешняя среда отражается на вашем состоянии.</p>
+          </article>
+          <article class="category-card reveal tone-amber">
+            <span class="category-icon"><svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg></span>
+            <h3>Дом и отношения</h3>
+            <p>Семья, быт, разговоры, конфликты или поддержка — всё, что формирует ваш вечер и утро.</p>
+          </article>
+          <article class="category-card reveal tone-navy">
+            <span class="category-icon"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"></use></svg></span>
+            <h3>Работа и учёба</h3>
+            <p>Нагрузка, дедлайны, отношения с коллегами, чувство контроля — важная часть вашего дня.</p>
+          </article>
+          <article class="category-card reveal tone-green">
+            <span class="category-icon"><svg class="icon" aria-hidden="true"><use href="#i-leaf"></use></svg></span>
+            <h3>Живая природа</h3>
+            <p>Домашние животные, чужие собаки, случайные встречи — даже мелочи могут задавать тон дню.</p>
+          </article>
+          <article class="category-card reveal tone-red">
+            <span class="category-icon"><svg class="icon" aria-hidden="true"><use href="#i-tool"></use></svg></span>
+            <h3>Неживая природа и быт</h3>
+            <p>Поломки, транспорт, техника, очереди, бытовые сбои — то, что мы часто списываем на «неудачный день».</p>
+          </article>
+          <article class="category-card reveal tone-teal">
+            <span class="category-icon"><svg class="icon" aria-hidden="true"><use href="#i-heart"></use></svg></span>
+            <h3>Самочувствие</h3>
+            <p>Сон, энергия, здоровье, физический комфорт — база, без которой сложно оценить всё остальное.</p>
+          </article>
+        </div>
+        <p class="category-note">Плюс отдельная сфера «отношения на улице» — люди и обстановка вне дома и работы.</p>
+      </div>
+    </section>
+
+    <section class="section" id="how">
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Как это работает</span>
-          <h2>Один день — одна запись.<br>Через две недели появляются связи.</h2>
+          <h2>Три шага — и вы начинаете видеть свои паттерны</h2>
         </div>
-        <ol class="steps">
+        <ol class="steps steps--three">
           <li class="step reveal">
             <span class="step-num">01</span>
             <div>
-              <h3>Оцените день</h3>
-              <p>Семь сфер: самочувствие, дом, работа, улица, погода, живая и неживая природа. От 1 до 10. Можно пропустить то, что не хотите оценивать.</p>
+              <h3>Отмечайте день</h3>
+              <p>Раз в день коротко оцените, как на вас повлияли разные сферы: от погоды и быта до отношений и самочувствия.</p>
             </div>
           </li>
           <li class="step reveal">
             <span class="step-num">02</span>
             <div>
-              <h3>Настройте веса</h3>
-              <p>Матрица парных сравнений Саати показывает, что важно именно для вас. Проверка согласованности подскажет, если суждения противоречат друг другу.</p>
+              <h3>Настраивайте важность факторов</h3>
+              <p>Приложение использует метод парных сравнений Саати: вы сами определяете, что для вас важнее. Например, для одного критична погода, для другого — атмосфера на работе. KnowTomorrow подстраивается под вас.</p>
             </div>
           </li>
           <li class="step reveal">
             <span class="step-num">03</span>
             <div>
-              <h3>Смотрите паттерны</h3>
-              <p>Приложение находит запаздывающие связи и различия: что чаще происходит перед хорошим или плохим следующим днём. С поправкой на множественные сравнения.</p>
-            </div>
-          </li>
-          <li class="step reveal">
-            <span class="step-num">04</span>
-            <div>
-              <h3>Читайте прогноз как гипотезу</h3>
-              <p>По каждой сфере и общей оценке — интервал, уверенность и объяснение. Модель проверена на вашем прошлом, а не на чужих обещаниях.</p>
+              <h3>Получайте аналитику и гипотезы</h3>
+              <p>На основе ваших записей приложение показывает, какие факторы чаще всего связаны с хорошими и плохими днями, и формирует осторожный прогноз-гипотезу на следующий день — не как приговор, а как повод обратить внимание.</p>
             </div>
           </li>
         </ol>
         <div class="steps-cta reveal">
-          <a class="btn btn-primary" href="#start">Попробовать на своих данных</a>
-          <a class="btn btn-ghost" href="/app?demo=1">Посмотреть с демо-данными</a>
+          <a class="btn btn-primary" href="#start">Попробовать KnowTomorrow</a>
+          <a class="btn btn-ghost" href="/app?demo=1">Посмотреть демо с данными</a>
         </div>
       </div>
     </section>
 
-    <section class="section" id="features">
+    <section class="section section--soft" id="compare">
       <div class="container">
         <div class="section-head reveal">
-          <span class="eyebrow">Возможности</span>
-          <h2>Больше, чем график настроения</h2>
+          <span class="eyebrow">Сравнение</span>
+          <h2>Чем KnowTomorrow отличается от «предсказаний»</h2>
         </div>
-        <div class="grid grid-3 feature-grid">
-          <article class="feature-card reveal">
-            <span class="feature-num">01</span>
-            <h3>Прогноз по каждой сфере</h3>
-            <p>Не только «общая оценка», но и отдельно самочувствие, работа, дом, погода и остальные критерии. С интервалом и трендом.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-num">02</span>
-            <h3>Объяснение «почему»</h3>
-            <p>Вклад признаков: «вчерашняя работа тянет вниз», «среднее за неделю — вверх». Для линейной модели — точные вклады, для деревьев — приблизительные.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-num">03</span>
-            <h3>Паттерны с статистикой</h3>
-            <p>Лаги 1, 2 и 3 дня, размер эффекта, p-значения и поправка Бенджамини—Хохберга. Без «учёные доказали».</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-num">04</span>
-            <h3>Веса Саати с CR</h3>
-            <p>Матрица парных сравнений, веса, индекс и отношение согласованности. Если CR &gt; 0.1 — приложение предложит конкретную тройку для пересмотра.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-num">05</span>
-            <h3>Холодный старт</h3>
-            <p>Пока данных мало, прогноз опирается на ваше среднее и анонимные популяционные ориентиры. По мере накопления записей подключается персональная модель.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-num">06</span>
-            <h3>Веб, телефон, компьютер</h3>
-            <p>Устанавливается как PWA, работает офлайн. Для Windows, macOS, Linux и Android доступны сборки в GitHub Releases.</p>
-          </article>
+        <div class="compare-wrap reveal">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th scope="col">Обычные предсказания</th>
+                <th scope="col">KnowTomorrow</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Основаны на случайных символах и общих фразах</td>
+                <td><span class="compare-mark is-good"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Основаны на ваших ежедневных записях</td>
+              </tr>
+              <tr>
+                <td>Не объясняют, откуда взялся вывод</td>
+                <td><span class="compare-mark is-good"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Показывают, какие факторы повлияли на оценку</td>
+              </tr>
+              <tr>
+                <td>Одинаковы для всех</td>
+                <td><span class="compare-mark is-good"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Настраиваются под вашу жизнь и ваши приоритеты</td>
+              </tr>
+              <tr>
+                <td>Обещают «узнать будущее»</td>
+                <td><span class="compare-mark is-good"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Помогают заметить закономерности и улучшить качество жизни</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="compare-note reveal"><strong>Вы не обязаны верить приложению.</strong> Вы можете проверить его на себе: неделя записей — и вы уже увидите, какие события чаще совпадают с плохими днями, а какие — с хорошими.</p>
+        <div class="trust-row reveal">
+          <span class="pill">AHP-веса</span>
+          <span class="pill">проверка согласованности CR</span>
+          <span class="pill">walk-forward на прошлом</span>
+          <span class="pill">без «чёрного ящика»</span>
         </div>
       </div>
     </section>
 
-    <section class="section section--science" id="science">
-      <div class="container science-grid">
-        <div class="science-copy reveal">
-          <span class="eyebrow">Наука и границы</span>
-          <h2>Модель, которую можно проверить</h2>
-          <p class="lead">На малых данных сложная нейросеть часто проигрывает простому среднему. Поэтому мы сравниваем модели на прошлых днях и выбираем ту, что действительно лучше.</p>
-          <ul class="science-list">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Ridge-регрессия и градиентный бустинг с малым числом признаков</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Признаки: лаги 1–2–3–7 дней, скользящие средние, день недели, перерыв в записях</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Walk-forward проверка: модель обучается только на прошлом</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Сравнение MAE и RMSE с наивным прогнозом «завтра = сегодня»</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Парный t-тест и поправка на множественные сравнения</li>
+    <section class="section" id="benefits">
+      <div class="container benefits-grid">
+        <div class="benefits-copy reveal">
+          <span class="eyebrow">Что вы получите</span>
+          <h2>Не «завтра будет плохо», а «вот на что стоит обратить внимание»</h2>
+          <ul class="benefit-list">
+            <li><span class="benefit-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Дневник настроения, который учитывает не только эмоции, но и контекст.</li>
+            <li><span class="benefit-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Понимание, какие сферы жизни влияют на вас сильнее всего.</li>
+            <li><span class="benefit-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Наглядную историю ваших дней и факторов.</li>
+            <li><span class="benefit-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Персональные веса воздействий — без «средних» советов для всех.</li>
+            <li><span class="benefit-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Осторожные прогнозы-гипотезы на следующий день на основе ваших данных.</li>
+            <li><span class="benefit-check"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Возможность замечать паттерны раньше и мягко корректировать день.</li>
           </ul>
-          <p class="science-note">Это инструмент саморефлексии, а не медицинский или диагностический прибор. Прогнозы — гипотезы, основанные на ваших записях.</p>
         </div>
-        <aside class="model-card reveal">
-          <div class="model-card-head">
-            <span class="badge badge--teal">model card</span>
-            <span class="model-card-date">демо-данные · 70 дней</span>
+        <aside class="benefit-panel reveal">
+          <span class="benefit-panel-kicker">Пример наблюдения</span>
+          <h3>«После низкой неживой природы день обычно ниже»</h3>
+          <p>Когда оценка «неживой природы» была ≤ 4, следующий день оказывался в среднем на 0.5 балла ниже. Это связь в ваших данных, а не доказанная причина.</p>
+          <div class="benefit-stats">
+            <div class="benefit-stat"><strong>11</strong><span>таких дней</span></div>
+            <div class="benefit-stat"><strong>0.5</strong><span>балла разницы</span></div>
+            <div class="benefit-stat"><strong>0.003</strong><span>p-значение</span></div>
           </div>
-          <h3>Проверка на прошлом</h3>
-          <table class="model-table">
-            <thead>
-              <tr><th>Метрика</th><th>Наивно</th><th>Модель</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>MAE</td><td>0.65</td><td class="model-strong">0.58</td></tr>
-              <tr><td>RMSE</td><td>0.81</td><td class="model-strong">0.74</td></tr>
-              <tr><td>Улучшение</td><td>—</td><td>≈11%</td></tr>
-              <tr><td>p-значение</td><td colspan="2">0.24 · не значимо</td></tr>
-            </tbody>
-          </table>
-          <p class="model-verdict">Небольшое улучшение, которого недостаточно для громких заявлений. Именно поэтому в приложении показывается и наивный прогноз.</p>
-          <div class="model-tags">
-            <span class="pill">AHP</span>
-            <span class="pill">CR</span>
-            <span class="pill">Ridge</span>
-            <span class="pill">GBDT</span>
-            <span class="pill">BH-FDR</span>
-          </div>
-          <p class="model-foot">Цифры приведены как пример формата отчёта, а не как обещание точности.</p>
+          <p class="benefit-panel-foot">KnowTomorrow показывает и число наблюдений, и неопределённость — чтобы вы могли оценить, насколько выводу можно доверять.</p>
         </aside>
       </div>
     </section>
 
-    <section class="section" id="downloads">
+    <section class="section section--soft" id="downloads">
       <div class="container">
         <div class="section-head reveal">
           <div class="row row--between">
@@ -375,25 +399,25 @@
       </div>
     </section>
 
-    <section class="section section--auth" id="start">
-      <div class="container auth-grid">
-        <div class="auth-copy reveal">
+    <section class="section section--final" id="start">
+      <div class="container final-grid">
+        <div class="final-copy reveal">
           <span class="eyebrow">Начать</span>
-          <h2>Первый день — сегодня</h2>
-          <p class="lead">Заведите аккаунт, чтобы синхронизировать записи между телефоном и компьютером. Или попробуйте без регистрации — данные останутся в браузере.</p>
-          <ul class="auth-benefits">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Регистрация за минуту, без карты</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Экспорт всех данных в JSON в любой момент</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Удаление аккаунта вместе с данными</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Анонимная агрегация — только с вашего согласия</li>
-          </ul>
-          <div class="auth-quote">
-            <p>«Прогноз — это гипотеза, а не приговор. Интереснее не угадать завтра, а понять, что на вас влияет».</p>
-            <span>из описания проекта</span>
+          <h2>Начните с одного дня. Завтра вы уже сможете посмотреть на него иначе.</h2>
+          <p class="lead">KnowTomorrow не обещает узнать будущее. Он помогает лучше понять настоящее — и на основе этого принимать более осознанные решения о своём дне.</p>
+          <a class="btn btn-primary btn-lg" href="#authCard" data-auth-cta="register">
+            Попробовать KnowTomorrow
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+          </a>
+          <p class="final-note">Бесплатно. Без карт и гороскопов. Только ваши данные и ваша жизнь.</p>
+          <div class="final-trust">
+            <span class="pill">регистрация за минуту</span>
+            <span class="pill">гостевой режим</span>
+            <span class="pill">данные можно удалить</span>
           </div>
         </div>
 
-        <div class="auth-card card reveal">
+        <div class="auth-card card reveal" id="authCard">
           <div class="auth-tabs" role="tablist" aria-label="Вход и регистрация">
             <button class="auth-tab is-active" id="tabLogin" type="button" role="tab" aria-selected="true" aria-controls="loginPanel" data-auth-tab="login">Вход</button>
             <button class="auth-tab" id="tabRegister" type="button" role="tab" aria-selected="false" aria-controls="registerPanel" data-auth-tab="register">Регистрация</button>
@@ -457,6 +481,10 @@
         </div>
         <div class="faq">
           <details class="reveal">
+            <summary>Это гадание?</summary>
+            <p>Нет. KnowTomorrow не предсказывает судьбу и не использует карты, кофейную гущу или гороскопы. Это дневник наблюдений: вы отмечаете события и оценки, а приложение показывает связи в ваших данных и осторожные гипотезы.</p>
+          </details>
+          <details class="reveal">
             <summary>Это медицинское приложение?</summary>
             <p>Нет. KnowTomorrow — инструмент саморефлексии, а не диагностический или медицинский прибор. Он не заменяет врача и не даёт рекомендаций по лечению. Если состояние вас беспокоит, обратитесь к специалисту.</p>
           </details>
@@ -496,13 +524,14 @@
           <span class="brand-mark"><img src="/assets/logo.png" alt=""></span>
           <span class="brand-name">Know<span class="brand-t">T</span>omorrow</span>
         </a>
-        <p>Дневник состояния с объяснимыми прогнозами. Не гадание — наблюдение за собой.</p>
+        <p>Личный дневник наблюдений: помогает понять, что влияет на ваше настроение, и заметить закономерности раньше.</p>
         <p class="footer-disclaimer">Не является медицинским изделием. Прогнозы — гипотезы, основанные на ваших записях.</p>
       </div>
       <div class="footer-col">
         <h4>Продукт</h4>
-        <a href="#features">Возможности</a>
-        <a href="#science">Наука</a>
+        <a href="#why">Зачем</a>
+        <a href="#what">Что внутри</a>
+        <a href="#compare">Сравнение</a>
         <a href="#downloads">Скачать</a>
         <a href="/app">Открыть приложение</a>
       </div>
@@ -516,7 +545,7 @@
       <div class="footer-col">
         <h4>Связь</h4>
         <a href="mailto:ghalut@mail.ru">ghalut@mail.ru</a>
-        <span class="footer-meta">KnowTomorrow v2.0</span>
+        <span class="footer-meta">KnowTomorrow v2.0.1</span>
         <span class="footer-meta">Сделано с уважением к данным</span>
       </div>
     </div>
@@ -530,4 +559,3 @@
   <script type="module" src="/js/site.js"></script>
 </body>
 </html>
-

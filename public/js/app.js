@@ -282,7 +282,7 @@ function applyView(view, { scroll = true } = {}) {
   const kicker = document.getElementById('viewKicker');
   if (title) title.textContent = meta.title;
   if (kicker) kicker.textContent = meta.kicker;
-  closeSidebar();
+  closeSidebar({ restoreFocus: true });
 
   if (view === 'today') renderToday();
   if (view === 'history') renderHistory();
@@ -299,17 +299,34 @@ function openSidebar() {
   const backdrop = document.getElementById('sidebarBackdrop');
   const toggle = document.getElementById('menuToggle');
   sidebar?.classList.add('is-open');
+  sidebar?.removeAttribute('aria-hidden');
+  if (sidebar) sidebar.inert = false;
   if (backdrop) backdrop.hidden = false;
+  document.body.classList.add('sidebar-open');
   toggle?.setAttribute('aria-expanded', 'true');
+  window.setTimeout(() => document.getElementById('sidebarClose')?.focus(), 80);
 }
 
-function closeSidebar() {
+function closeSidebar({ restoreFocus = false } = {}) {
   const sidebar = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
   const toggle = document.getElementById('menuToggle');
+  const wasOpen = Boolean(sidebar?.classList.contains('is-open'));
   sidebar?.classList.remove('is-open');
+  if (sidebar) {
+    const mobile = window.innerWidth <= 1020;
+    if (mobile) {
+      sidebar.setAttribute('aria-hidden', 'true');
+      sidebar.inert = true;
+    } else {
+      sidebar.removeAttribute('aria-hidden');
+      sidebar.inert = false;
+    }
+  }
   if (backdrop) backdrop.hidden = true;
+  document.body.classList.remove('sidebar-open');
   toggle?.setAttribute('aria-expanded', 'false');
+  if (wasOpen && restoreFocus && window.innerWidth <= 1020) toggle?.focus();
 }
 
 // ---------------------------------------------------------------------------
@@ -1802,10 +1819,18 @@ function installPWA() {
 function bindEvents() {
   document.getElementById('menuToggle')?.addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
-    if (sidebar?.classList.contains('is-open')) closeSidebar();
+    if (sidebar?.classList.contains('is-open')) closeSidebar({ restoreFocus: true });
     else openSidebar();
   });
-  document.getElementById('sidebarBackdrop')?.addEventListener('click', closeSidebar);
+  document.getElementById('sidebarClose')?.addEventListener('click', () =>
+    closeSidebar({ restoreFocus: true })
+  );
+  document.getElementById('sidebarBackdrop')?.addEventListener('click', () =>
+    closeSidebar({ restoreFocus: true })
+  );
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1020) closeSidebar();
+  });
 
   document.querySelectorAll('.nav-item[data-view], .mobile-nav-item[data-view]').forEach((button) => {
     button.addEventListener('click', () => navigate(button.dataset.view));
@@ -1909,7 +1934,7 @@ function bindEvents() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closeModal();
-      closeSidebar();
+      closeSidebar({ restoreFocus: true });
     }
   });
 

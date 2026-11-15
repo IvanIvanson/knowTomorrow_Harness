@@ -1,9 +1,9 @@
 {
   "name": "knowtomorrow",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "type": "module",
-  "description": "KnowTomorrow — дневник состояния с объяснимыми покритериальными прогнозами",
+  "description": "KnowTomorrow — личный дневник наблюдений с объяснимой аналитикой и покритериальными гипотезами",
   "engines": {
     "node": ">=24.0.0"
   },
